@@ -23,8 +23,10 @@ const LoginPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.removeItem('authToken');
+    console.log("Clearing sessionStorage on mount");
+    sessionStorage.clear();
   }, []);
+
   
   const handleLogin = async () => {
     if (!hrid || !hireDate) {

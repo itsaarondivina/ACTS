@@ -38,15 +38,30 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
         console.log("exists: ", exists);
              
         if (exists) {
-          // Store user information in localStorage for session
-          localStorage.setItem('authToken', JSON.stringify({
+          // Store user information in sessionStorage for the current session
+          sessionStorage.setItem('authToken', JSON.stringify({
             id: user.ID,
             name: user.Name,
             hireDate: user.HireDate,
             // Add other fields as needed
           }));
-        }else {
-          throw new Error("No Access");
+          console.log("Auth token saved in sessionStorage:", sessionStorage.getItem('authToken'));
+        } else {
+          const checkTeamAccess = await axios.get(`http://127.0.0.1:8000/team_access/?project_id=${user.ProjectID}`);
+          console.log(checkTeamAccess)
+
+          const teamexists = checkTeamAccess.data && checkTeamAccess.data.length > 0; // Adjust based on your actual response structure
+          console.log("Team Exists: ",teamexists)
+          if(teamexists){
+            sessionStorage.setItem('authToken', JSON.stringify({
+              id: user.ID,
+              name: user.Name,
+              hireDate: user.HireDate,
+              // Add other fields as needed
+            }));
+          } else{
+            throw new Error("No Access");
+          }
         }
       }
     }
@@ -66,11 +81,11 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
 
 export const isAuthenticated = () => {
   try {
-    const authToken = localStorage.getItem('authToken');
-    console.log("Local Storage Auth Token:", authToken);
+    const authToken = sessionStorage.getItem('authToken');
+    console.log("Session Storage Auth Token:", authToken);
     return !!authToken;
   } catch (error) {
-    console.error("Error accessing localStorage:", error);
+    console.error("Error accessing sessionStorage:", error);
     return false;
   }
 };

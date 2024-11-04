@@ -7,10 +7,17 @@ class TeamAccessListCreateView(generics.ListCreateAPIView):
     queryset = Team_Access.objects.all()
     serializer_class = TeamAccessSerializer
 
+    def get_queryset(self):
+        projectid = self.request.query_params.get('project_id', None)
+        if projectid is not None:
+            return self.queryset.filter(project_id=projectid)  # Adjust 'hrid' to your actual field name
+        return self.queryset
 # Retrieve, update, or delete a specific entry
 class TeamAccessDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Team_Access.objects.all()
     serializer_class = TeamAccessSerializer
+    
+    
 
 class UserAdminListCreateView(generics.ListCreateAPIView):
     queryset = User_Admin.objects.all()
