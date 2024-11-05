@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Team_Access, User_Admin
-from .serializers import TeamAccessSerializer, UserAdminSerializer
+from .models import Team_Access, User_Admin,Category
+from .serializers import TeamAccessSerializer, UserAdminSerializer,CategorySerializer
 
 # List all entries or create a new one
 class TeamAccessListCreateView(generics.ListCreateAPIView):
@@ -39,3 +39,7 @@ class UserAdminListCreateView(generics.ListCreateAPIView):
 class UserAdminDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User_Admin.objects.all()
     serializer_class = UserAdminSerializer
+
+class CategoryListCreateView(generics.ListCreateAPIView):
+    queryset = Category.objects.all()  # Default queryset to get all objects
+    serializer_class = CategorySerializer

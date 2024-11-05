@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('team_access/', include('backend.urls')),  # Include the app's URL configuration
     path('user_admin/', include('backend.user_admin_urls')),  # Include the app's URL configuration
+    path('category/', include('backend.category_urls')),  # Include the app's URL configuration
 ]
