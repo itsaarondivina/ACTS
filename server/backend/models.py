@@ -35,3 +35,17 @@ class User_Admin(models.Model):
 
     def __str__(self):
         return self.HRID
+    
+
+class Category(models.Model):  # Replace 'YourModelName' with an appropriate name for your model
+    id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=100, null=False)
+    description = models.CharField(max_length=100, null=True, blank=True)  # Optional field
+    is_active = models.BooleanField(default=True)
+    created_by = models.CharField(max_length=150, null=False)
+    updated_by = models.CharField(max_length=150, null=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title  # or any other field that makes sense as a string representation

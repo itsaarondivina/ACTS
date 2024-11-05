@@ -20,14 +20,20 @@ class TeamAccessDetailView(generics.RetrieveUpdateDestroyAPIView):
     
 
 class UserAdminListCreateView(generics.ListCreateAPIView):
-    queryset = User_Admin.objects.all()
+    queryset = User_Admin.objects.all()  # Default queryset to get all objects
     serializer_class = UserAdminSerializer
 
     def get_queryset(self):
+        # Get the 'HRID' parameter from the query string
         hrid = self.request.query_params.get('HRID', None)
+        
+        # If 'HRID' is provided, filter by it
         if hrid is not None:
-            return self.queryset.filter(HRID=hrid)  # Adjust 'hrid' to your actual field name
-        return self.queryset
+            return User_Admin.objects.filter(HRID=hrid)  # Filter based on HRID
+        
+        # If 'HRID' is not provided, return all objects
+        return User_Admin.objects.all()  # Return all User_Admin objects
+
 
 # Retrieve, update, or delete a specific entry
 class UserAdminDetailView(generics.RetrieveUpdateDestroyAPIView):

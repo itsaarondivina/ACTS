@@ -1,13 +1,19 @@
 // src/App.tsx
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import  ProtectedRoute  from './components/routings.tsx';
-import HomePage from './pages/HomePage.tsx';
-import LoginPage from './pages/Login.tsx';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import ProtectedRoute from './components/routings'; // Make sure this component handles redirection
+import HomePage from './pages/HomePage';
+import ManageLookups from './pages/ManageLookups'; // Import ManageLookups
+import LoginPage from './pages/Login';
+import Navbar from './components/header';
 
 const App: React.FC = () => {
+  const location = useLocation(); // Get the current location
+
   return (
-    <Router>
+    <div>
+      {/* Render Navbar only if not on the login page */}
+      {location.pathname !== '/login' && <Navbar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
@@ -18,10 +24,25 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/ManageLookups"
+          element={
+            <ProtectedRoute>
+              <ManageLookups />
+            </ProtectedRoute>
+          }
+        />
         {/* Add other protected routes here */}
       </Routes>
-    </Router>
+    </div>
   );
 };
 
-export default App;
+// Wrap the App component in Router
+const Root: React.FC = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default Root;

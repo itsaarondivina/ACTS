@@ -38,11 +38,13 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
         console.log("exists: ", exists);
              
         if (exists) {
+          console.log("FullName NAME : ", user.FirstName +' ' + user.LastName)
           // Store user information in sessionStorage for the current session
           sessionStorage.setItem('authToken', JSON.stringify({
             id: user.ID,
-            name: user.Name,
+            name: user.FirstName +' ' + user.LastName,
             hireDate: user.HireDate,
+            profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
             // Add other fields as needed
           }));
           console.log("Auth token saved in sessionStorage:", sessionStorage.getItem('authToken'));
@@ -55,10 +57,10 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
           if(teamexists){
             sessionStorage.setItem('authToken', JSON.stringify({
               id: user.ID,
-              name: user.Name,
+              name: user.FirstName +' ' + user.LastName,
               hireDate: user.HireDate,
-              // Add other fields as needed
-            }));
+              profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
+            }));            
           } else{
             throw new Error("No Access");
           }
@@ -69,7 +71,7 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
     // Return an object that matches the EmployeeDetails interface
     return {
       id: user.ID,
-      name: user.Name,
+      name: user.FirstName +' ' + user.LastName,
       hireDate: user.HireDate,
       // Map other fields as needed
     };
