@@ -49,3 +49,17 @@ class Category(models.Model):  # Replace 'YourModelName' with an appropriate nam
 
     def __str__(self):
         return self.title  # or any other field that makes sense as a string representation
+
+class DropDownLookup (models.Model):
+    id = models.AutoField(primary_key=True)
+    item_name = models.CharField(max_length=250, null=False)
+    description = models.CharField(max_length=100, null=True, blank=True)  # Optional field
+    category_id = models.IntegerField(null=False)
+    is_active = models.BooleanField(default=True, null=False)
+    created_by = models.CharField(max_length=150, null=False)
+    updated_by = models.CharField(max_length=150, null=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.item_name
