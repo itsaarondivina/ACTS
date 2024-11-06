@@ -1,6 +1,6 @@
 # serializers.py
 from rest_framework import serializers
-from .models import Team_Access,User_Admin, Category
+from .models import Team_Access,User_Admin, Category, DropDownLookup
 
 class TeamAccessSerializer(serializers.ModelSerializer):
     class Meta:
@@ -16,6 +16,11 @@ class UserAdminSerializer(serializers.ModelSerializer):
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
+        fields = '__all__'
+
+class DropdownLookupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DropDownLookup
         fields = '__all__'
 
 

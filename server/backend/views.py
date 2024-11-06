@@ -1,6 +1,6 @@
 from rest_framework import generics
-from .models import Team_Access, User_Admin,Category
-from .serializers import TeamAccessSerializer, UserAdminSerializer,CategorySerializer
+from .models import Team_Access, User_Admin,Category, DropDownLookup
+from .serializers import TeamAccessSerializer, UserAdminSerializer,CategorySerializer, DropdownLookupSerializer
 
 # List all entries or create a new one
 class TeamAccessListCreateView(generics.ListCreateAPIView):
@@ -43,3 +43,8 @@ class UserAdminDetailView(generics.RetrieveUpdateDestroyAPIView):
 class CategoryListCreateView(generics.ListCreateAPIView):
     queryset = Category.objects.all()  # Default queryset to get all objects
     serializer_class = CategorySerializer
+
+
+class DropdownlookupListCreateView(generics.ListCreateAPIView):
+    queryset = DropDownLookup.objects.all()  # Default queryset to get all objects
+    serializer_class = DropdownLookupSerializer
