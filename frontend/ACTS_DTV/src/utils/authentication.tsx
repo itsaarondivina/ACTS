@@ -11,31 +11,31 @@ export interface EmployeeDetails {
 
 export const getEmployeeDetails = async (hrid: string, hireDate: string): Promise<EmployeeDetails> => {
   try {
-    console.log("API HIREDATE", hireDate);
+    // console.log("API HIREDATE", hireDate);
     const response = await axios.get(
       `https://vxicareers.com/srv2-api/api/v1/login/GetEmpDetailsOnGlobalAPI?nt=${hrid}&domain=VXIPHP`
     );
 
     const user = response.data.UserInfo;
-    console.log("USER :", user);
+    // console.log("USER :", user);
 
     // Check if the Table property is null or empty
     if (!user || !user.ID) {
       throw new Error("HRID is Incorrect"); // Throw an error when the HRID is incorrect
     } else {
       const newhiredate = String(user.HireDate).replace(/\//g, '').trim(); // Convert to string, remove all slashes, and trim whitespace
-      console.log("Hiredatenew: ", newhiredate);
-      console.log("Provided Hire Date: ", hireDate);
+      // console.log("Hiredatenew: ", newhiredate);
+      // console.log("Provided Hire Date: ", hireDate);
 
       if (hireDate.trim() !== newhiredate) {
         throw new Error("Hire Date is Incorrect");
       } else {
-        console.log("User ID Before fetching API:", user.ID);
+        // console.log("User ID Before fetching API:", user.ID);
         // Check user admin table
         const localResponse = await axios.get(`http://127.0.0.1:8000/user_admin/?HRID=${user.ID}`);
-        console.log("FROM DB: ", localResponse.data);
+        // console.log("FROM DB: ", localResponse.data);
         const exists = localResponse.data && localResponse.data.length > 0; // Adjust based on your actual response structure
-        console.log("exists: ", exists);
+        // console.log("exists: ", exists);
              
         if (exists) {
           console.log("FullName NAME : ", user.FirstName +' ' + user.LastName)
@@ -47,13 +47,13 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
             profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
             // Add other fields as needed
           }));
-          console.log("Auth token saved in sessionStorage:", sessionStorage.getItem('authToken'));
+          // console.log("Auth token saved in sessionStorage:", sessionStorage.getItem('authToken'));
         } else {
           const checkTeamAccess = await axios.get(`http://127.0.0.1:8000/team_access/?project_id=${user.ProjectID}`);
-          console.log(checkTeamAccess)
+          // console.log(checkTeamAccess)
 
           const teamexists = checkTeamAccess.data && checkTeamAccess.data.length > 0; // Adjust based on your actual response structure
-          console.log("Team Exists: ",teamexists)
+          // console.log("Team Exists: ",teamexists)
           if(teamexists){
             sessionStorage.setItem('authToken', JSON.stringify({
               id: user.ID,

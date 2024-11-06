@@ -17,6 +17,7 @@ const ManageLookups: React.FC = () => {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [selectedItem, setSelectedItem] = useState<any>(null); // State to hold selected item for editing
 
   const handleOpen = () => setOpen(true);
 
@@ -30,17 +31,20 @@ const ManageLookups: React.FC = () => {
     setIsActive(false);
     setCategory('');
     setOpen(false);
+    setSelectedItem(null); // Reset selected item after closing
   };
 
-  const handleSave = async () => {
+  const handleSave = async (id: number | null) => {
     const newLookupItem = {
       category_id: Number(category),
       item_name,
       description,
       is_active,
       created_by: sessionhrid,
-      updated_by: sessionhrid
+      updated_by: sessionhrid,
+      ...(id && { id })  // Conditionally include the 'id' if it's provided
     };
+  
     try {
       const response = await saveLookupItem(newLookupItem);
       console.log('Lookup Item saved successfully:', response);
@@ -50,9 +54,20 @@ const ManageLookups: React.FC = () => {
       console.error('Failed to save lookup item:', error);
     }
   };
+  
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
+  };
+
+  const handleEdit = (item: any) => {
+    console.log(item.id)
+    setSelectedItem(item);
+    setCategory(item.category_id);
+    setItemName(item.item_name);
+    setDescription(item.description);
+    setIsActive(item.is_active);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -75,7 +90,7 @@ const ManageLookups: React.FC = () => {
 
   const isFormComplete = category !== '' && item_name.trim() !== '' && description.trim() !== '';
 
-  const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
+  const handleChangePage = (_event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
   };
 
@@ -96,8 +111,8 @@ const ManageLookups: React.FC = () => {
   });
 
   return (
-    <Box sx={{ paddingTop: 14, margin: '5px 15vh' }}>
-      <Typography variant="h4" gutterBottom sx={{ paddingBottom: 3 }}>
+    <Box sx={{ paddingTop: 10, margin: '5px 15vh' }}>
+      <Typography variant="h4" gutterBottom sx={{ paddingBottom: 1 }}>
         Look Up Management
       </Typography>
       <Button
@@ -109,7 +124,7 @@ const ManageLookups: React.FC = () => {
       </Button>
 
       {/* Search bar for filtering the table */}
-      <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: 2 }}>
+      <Box display="flex" justifyContent="flex-end" sx={{ marginBottom: 0 }}>
         <TextField
           label="Search Lookup"
           variant="outlined"
@@ -117,7 +132,6 @@ const ManageLookups: React.FC = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ width: '300px' }}
           size="small"  // This reduces the height of the text field
-
         />
       </Box>
 
@@ -141,7 +155,7 @@ const ManageLookups: React.FC = () => {
           }}
         >
           <Typography id="modal-title" variant="h6" gutterBottom>
-            Add New Lookup Item
+            {selectedItem ? 'Edit Lookup Item' : 'Add New Lookup Item'}
           </Typography>
 
           <TextField
@@ -194,7 +208,7 @@ const ManageLookups: React.FC = () => {
             <Button
               variant="contained"
               color="primary"
-              onClick={handleSave}
+              onClick={() => handleSave(selectedItem?.id)}  // Pass selectedItem.id if it's available
               disabled={!isFormComplete}
             >
               Save
@@ -227,6 +241,7 @@ const ManageLookups: React.FC = () => {
               <TableCell>Updated By</TableCell>
               <TableCell>Date Created</TableCell>
               <TableCell>Date Updated</TableCell>
+              <TableCell>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -243,6 +258,13 @@ const ManageLookups: React.FC = () => {
                   <TableCell>{item.updated_by}</TableCell>
                   <TableCell>{new Date(item.date_created).toLocaleDateString('en-US')}</TableCell>
                   <TableCell>{new Date(item.date_updated).toLocaleDateString('en-US')}</TableCell>
+                  <TableCell>
+                  <Button
+                    onClick={() => handleEdit(item)}
+                    sx={{ backgroundColor: '#ea6512', color:'black', '&:hover': { backgroundColor: '#0056b3' } }}
+                  >Edit
+                  </Button>
+                  </TableCell>
                 </TableRow>
               );
             })}

@@ -21,20 +21,31 @@ export const fetchCategories = async () => {
   };
 
   export const saveLookupItem = async (lookupItem: {
-    category_id: number; // Changed to number to align with integer type
+    id?: number; // Optional id for updating
+    category_id: number;
     item_name: string;
     description: string;
     is_active: boolean;
     created_by: string;
     updated_by: string;
-  }) => {
-    try {
-      console.log("API SAVING: ", lookupItem);
+}) => {
+  try {
+    // Log the lookup item for debugging
+    console.log("ID: ", lookupItem.id);
+
+    // If id exists, it's an update request
+    if (lookupItem.id) {
+      const response = await axios.put(`http://127.0.0.1:8000/dropdownlookup/${lookupItem.id}/`, lookupItem);
+      return response.data; // Return the updated item
+    } else {
+      // Otherwise, it's an add request
       const response = await axios.post('http://127.0.0.1:8000/dropdownlookup/', lookupItem);
-      return response.data;
-    } catch (error) {
-      console.error('Error saving lookup item:', error);
-      throw error;
+      return response.data; // Return the newly created item
     }
-  };
+  } catch (error) {
+    console.error('Error saving lookup item:', error);
+    throw error; // Rethrow the error for handling by the calling function
+  }
+};
+
   

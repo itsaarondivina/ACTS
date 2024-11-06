@@ -48,3 +48,8 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 class DropdownlookupListCreateView(generics.ListCreateAPIView):
     queryset = DropDownLookup.objects.all()  # Default queryset to get all objects
     serializer_class = DropdownLookupSerializer
+
+class DropdownlookupDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = DropDownLookup.objects.all()  # Queryset to get all objects
+    serializer_class = DropdownLookupSerializer
+    lookup_field = 'pk'
