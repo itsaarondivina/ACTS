@@ -48,6 +48,7 @@ const ManageLookups: React.FC = () => {
     try {
       const response = await saveLookupItem(newLookupItem);
       console.log('Lookup Item saved successfully:', response);
+      await fetchLookupItems(); // Call fetchLookupItems to refresh the lookup items after save
       handleClose();
       setSnackbarOpen(true);
     } catch (error) {
@@ -55,6 +56,15 @@ const ManageLookups: React.FC = () => {
     }
   };
   
+
+  const fetchLookupItems = async () => {
+    try {
+      const lookupItemsData = await fetchLookup();
+      setLookupItems(lookupItemsData);
+    } catch (error) {
+      console.error('Error fetching lookup items:', error);
+    }
+  };
 
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -75,11 +85,11 @@ const ManageLookups: React.FC = () => {
       try {
         const categoriesData = await fetchCategories();
         setCategories(categoriesData);
-        console.log("Categories: ", categoriesData);
+        // console.log("Categories: ", categoriesData);
 
         const lookupItemsData = await fetchLookup();
         setLookupItems(lookupItemsData);
-        console.log("Lookup Items: ", lookupItemsData);
+        // console.log("Lookup Items: ", lookupItemsData);
       } catch (error) {
         console.error('There was an error fetching data:', error);
       }
