@@ -47,6 +47,10 @@ const Navbar: React.FC = () => {
     setAnchorElChoices(null);
   };
 
+  const openHelpPDF = () => {
+    window.open('/FAQ_-_Agent_Call_Tracker_System_(ACTS).pdf', '_blank');
+  };
+
   return (
     <AppBar position="fixed" sx={{ backgroundColor: '#222', borderColor: '#080808'}}>
       <Toolbar>
@@ -113,11 +117,11 @@ const Navbar: React.FC = () => {
           </MenuItem>
           
         </Menu>
-        <IconButton color="inherit" onClick={() => alert("Help clicked!")}>
-          <InfoIcon />
+        <IconButton color="inherit" onClick={openHelpPDF}>
+          <HelpIcon />
         </IconButton>
         <IconButton color="inherit" onClick={() => alert("Help clicked!")}>
-          <HelpIcon />
+          <InfoIcon />
         </IconButton>
         {user && (
           <div style={{ marginLeft: 20 }}>
