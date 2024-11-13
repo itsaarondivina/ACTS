@@ -63,3 +63,49 @@ class DropDownLookup (models.Model):
 
     def __str__(self):
         return self.item_name
+    
+class AgentCts (models.Model):
+    id = models.AutoField(primary_key=True)
+    call_type = models.CharField(max_length=100, null=True)  # Optional field
+    account_type = models.CharField(max_length=250, null=True)
+    case_id = models.CharField(max_length=250, null=True)
+    area = models.CharField(max_length=250, null=True)
+    sub_area = models.CharField(max_length=250, null=True)
+    transfer_call = models.CharField(max_length=250, null=True)
+    transfer_destination = models.CharField(max_length=250, null=True)
+    transfer_attuid = models.CharField(max_length=250, null=True)
+    issue_resolved = models.CharField(max_length=250, null=True)
+    is_customer_happy = models.CharField(max_length=250, null=True)
+    provide_credit = models.CharField(max_length=250, null=True)
+    credit_amount = models.CharField(max_length=250, null=True)
+    credit_attuid = models.CharField(max_length=250, null=True)
+    appointment_sameday = models.CharField(max_length=250, null=True)
+    appointment_sameday_2 = models.CharField(max_length=250, null=True)
+    focus_driver = models.CharField(max_length=250, null=True)
+    focus_driver_2 = models.CharField(max_length=250, null=True)
+    repeat_prediction = models.CharField(max_length=250, null=True)
+    pplan_close = models.CharField(max_length=250, null=True)
+    pplan_close_2 = models.CharField(max_length=250, null=True)
+    dispatch_call = models.CharField(max_length=250, null=True)
+    due_date = models.CharField(max_length=250, null=True)
+    select_time = models.CharField(max_length=250, null=True)
+    dispatch_equipment = models.CharField(max_length=250, null=True)
+    wmt = models.CharField(max_length=250, null=True)
+    wmt_2 = models.CharField(max_length=250, null=True)
+    tool_issue= models.CharField(max_length=250, null=True)
+    tool_issue_2= models.CharField(max_length=250, null=True)
+    is_active = models.BooleanField(default=True, null=False)
+    created_by = models.CharField(max_length=150, null=False)
+    updated_by = models.CharField(max_length=150, null=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now=True)
+    full_name = models.CharField(max_length=150, null=True)
+    region = models.CharField(max_length=150, null=True)
+    tl_name = models.CharField(max_length=150, null=True)
+    tl_hrid = models.CharField(max_length=150, null=True)
+    om_name = models.CharField(max_length=150, null=True)
+    om_hrid = models.CharField(max_length=150, null=True)
+
+
+    def __str__(self):
+        return self.case_id

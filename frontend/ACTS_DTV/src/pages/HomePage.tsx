@@ -145,12 +145,15 @@ const AgentForm: React.FC = () => {
   );
   const handleCallTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCallType(event.target.value);
+    clearFormAccount();
     console.log("Selected Call Type: ", event.target.value);
   };
 
   const handleTransfercall = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedTransferCall(event.target.value);
     console.log("Selected Transfer Call: ", event.target.value);
+    setTransferDestination("");
+    setTransferAttuid("");
   };
   const handleIssueResolved = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIssueResolved(event.target.value);
@@ -163,6 +166,8 @@ const AgentForm: React.FC = () => {
   const handleCredit = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCredit(event.target.value);
     console.log("Selected Credit: ", event.target.value);
+    setCreditAmount("");
+    setCreditAttuid("");
   };
   const handlepplan2 = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPplan2(event.target.value);
@@ -223,6 +228,74 @@ const AgentForm: React.FC = () => {
       settoolIssueDropdown("");
     }
   };
+
+  const isFormComplete2 =
+    selectedCallType === "Misdirect" &&
+    selectedAccountType === "No Account" &&
+    caseId !== "" &&
+    selectedTransferCall !== "" &&
+    (selectedTransferCall === "No"
+      ? true
+      : transferDestination !== null && transferDestination !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedTransferCall === "No"
+      ? true
+      : transferAttuid !== null && transferAttuid !== ""); // Allow null or empty string for subArea if account type is "No Account";
+
+  const isFormComplete =
+    selectedCallType &&
+    selectedAccountType &&
+    caseId &&
+    (selectedAccountType === "No Account"
+      ? true
+      : areaCtv !== null && subArea !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedAccountType === "No Account"
+      ? true
+      : subArea !== null && subArea !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedTransferCall &&
+    (selectedTransferCall === "No"
+      ? true
+      : transferDestination !== null && transferDestination !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedTransferCall === "No"
+      ? true
+      : transferAttuid !== null && transferAttuid !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedIssueResolved &&
+    selectedIsCustomer &&
+    selectedCredit &&
+    (selectedCredit === "No"
+      ? true
+      : creditAmount !== null && creditAmount !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedCredit === "No"
+      ? true
+      : creditAttuid !== null && creditAttuid !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedAppointmentSameday &&
+    (selectedAppointmentSameday === "No"
+      ? true
+      : sameDayDropdown !== null && sameDayDropdown !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedCallDriver &&
+    (selectedCallDriver === "No"
+      ? true
+      : callDriverDropdown !== null && callDriverDropdown !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedRepeatPrediction &&
+    selectedPplan &&
+    (selectedPplan === "No"
+      ? true
+      : selectedPplan2 !== null && selectedPplan2 !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedDispatch &&
+    (selectedDispatch === "N/A" ? true : dueDate !== null && dueDate !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedDispatch === "N/A"
+      ? true
+      : selectTime !== null && selectTime !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    (selectedDispatch === "N/A"
+      ? true
+      : dispatchEquipment !== null && dispatchEquipment !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedWMT &&
+    (selectedWMT === "No"
+      ? true
+      : wmtDropdown !== null && wmtDropdown !== "") && // Allow null or empty string for subArea if account type is "No Account"
+    selectedToolIssue &&
+    (selectedToolIssue === "No"
+      ? true
+      : toolIssueDropdown !== null && toolIssueDropdown !== ""); // Allow null or empty string for subArea if account type is "No Account"
   const handleAreaChange = (event: { target: { value: any } }) => {
     const newValue = event.target.value;
     setArea(newValue);
@@ -447,18 +520,103 @@ const AgentForm: React.FC = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSelectedAccountType(event.target.value);
-    console.log("Selected Account Type: ", event.target.value);
+    console.log("Selected Account Type: ", selectedAccountType);
     setCaseId("");
     setArea("");
     setsubArea("");
   };
 
+  const clearFormAccount = () => {
+    setSelectedAccountType("");
+    setCaseId("");
+    setArea("");
+    setsubArea("");
+    setSelectedTransferCall("");
+    setTransferDestination("");
+    setTransferAttuid("");
+    setIssueResolved("");
+    setIsCustomer("");
+    setSelectedCredit("");
+    setCreditAmount("");
+    setCreditAttuid("");
+    setAppointmentSameday("");
+    setsameDayDropdown("");
+    setcallDriver("");
+    setcallDriverDropdown("");
+    setRepeatPrediction("");
+    setPplan("");
+    setPplan2("");
+    setdispatchEquipment("");
+    setdueDate("");
+    setTime("");
+    setDispatch("");
+    setwmtDropdown(""); // Adjust name if required for consistency
+    setWMT("");
+    setToolIssue("");
+    settoolIssueDropdown("");
+  };
+  const clearForm = () => {
+    setSelectedCallType("");
+    setSelectedAccountType("");
+    setCaseId("");
+    setArea("");
+    setsubArea("");
+    setSelectedTransferCall("");
+    setTransferDestination("");
+    setTransferAttuid("");
+    setIssueResolved("");
+    setIsCustomer("");
+    setSelectedCredit("");
+    setCreditAmount("");
+    setCreditAttuid("");
+    setAppointmentSameday("");
+    setsameDayDropdown("");
+    setcallDriver("");
+    setcallDriverDropdown("");
+    setRepeatPrediction("");
+    setPplan("");
+    setPplan2("");
+    setdispatchEquipment("");
+    setdueDate("");
+    setTime("");
+    setDispatch("");
+    setwmtDropdown(""); // Adjust name if required for consistency
+    setWMT("");
+    setToolIssue("");
+    settoolIssueDropdown("");
+  };
+
   const handleSave = () => {
     // Log selected values when Save is pressed
     console.log("Form Data:");
-    console.log("Selected Call Type: ", selectedCallType);
-    console.log("Selected Account Type: ", selectedAccountType);
-    console.log("Case ID: ", caseId); // Log the Case ID
+    console.log("Selected Call Type:", selectedCallType);
+    console.log("Selected Account Type:", selectedAccountType);
+    console.log("Case ID:", caseId);
+    console.log("Area CTV:", areaCtv);
+    console.log("Sub Area:", subArea);
+    console.log("Selected Transfer Call:", selectedTransferCall);
+    console.log("Transfer Destination:", transferDestination);
+    console.log("Transfer ATTUID:", transferAttuid);
+    console.log("Selected Issue Resolved:", selectedIssueResolved);
+    console.log("Selected Is Customer:", selectedIsCustomer);
+    console.log("Selected Credit:", selectedCredit);
+    console.log("Credit Amount:", creditAmount);
+    console.log("Credit ATTUID:", creditAttuid);
+    console.log("Selected Appointment Same Day:", selectedAppointmentSameday);
+    console.log("Same Day Dropdown:", sameDayDropdown);
+    console.log("Selected Call Driver:", selectedCallDriver);
+    console.log("Call Driver Dropdown:", callDriverDropdown);
+    console.log("Selected Repeat Prediction:", selectedRepeatPrediction);
+    console.log("Selected PPlan:", selectedPplan);
+    console.log("Selected PPlan2:", selectedPplan2);
+    console.log("Selected Dispatch:", selectedDispatch);
+    console.log("Due Date:", dueDate);
+    console.log("Select Time:", selectTime);
+    console.log("Dispatch Equipment:", dispatchEquipment);
+    console.log("Selected WMT:", selectedWMT);
+    console.log("WMT Dropdown:", wmtDropdown);
+    console.log("Selected Tool Issue:", selectedToolIssue);
+    console.log("Tool Issue Dropdown:", toolIssueDropdown);
   };
 
   return (
@@ -490,10 +648,20 @@ const AgentForm: React.FC = () => {
           color="success"
           startIcon={<SaveIcon />}
           onClick={handleSave} // Attach the save handler here
+          disabled={
+            !isFormComplete &&
+            selectedCallType !== "Ghost Call" &&
+            !isFormComplete2
+          }
         >
           Save
         </Button>
-        <Button variant="contained" color="error" startIcon={<ClearIcon />}>
+        <Button
+          variant="contained"
+          color="error"
+          startIcon={<ClearIcon />}
+          onClick={clearForm}
+        >
           Clear
         </Button>
       </Box>
@@ -705,7 +873,7 @@ const AgentForm: React.FC = () => {
                     <em>Select an option</em>
                   </MenuItem>
                   {subAreaOptions.map((option) => (
-                    <MenuItem key={option.id} value={option.id}>
+                    <MenuItem key={option.id} value={option.item_name}>
                       {option.item_name}
                     </MenuItem>
                   ))}
@@ -830,719 +998,735 @@ const AgentForm: React.FC = () => {
                 />
               </FormControl>
             </Box>
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Issue Resolved
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedIssueResolved}
-                  onChange={handleIssueResolved}
-                >
-                  {issueResolvedOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
 
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Is the customer happy with the resolution?
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedIsCustomer}
-                  onChange={handleIsCustomer}
-                >
-                  {isCustomerOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Box>
-
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
-
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Did you provide credit?
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedCredit}
-                  onChange={handleCredit}
-                >
-                  {creditOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Credit Amount
-                </FormLabel>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  value={creditAmount}
-                  onChange={(e) => setCreditAmount(e.target.value)}
-                  inputProps={{ maxLength: 6 }}
-                  disabled={selectedCredit === "No" || selectedCredit === ""}
-                  sx={{
-                    cursor:
-                      selectedCredit === "No" || selectedCredit === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
+            {!(
+              selectedCallType === "Misdirect" &&
+              selectedAccountType === "No Account"
+            ) && (
+              <>
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
                   }}
                 />
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
                 >
-                  Credit Approver's ATTUID
-                </FormLabel>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  value={creditAttuid}
-                  onChange={(e) => setCreditAttuid(e.target.value)}
-                  inputProps={{ maxLength: 6 }}
-                  disabled={selectedCredit === "No" || selectedCredit === ""}
-                  sx={{
-                    cursor:
-                      selectedCredit === "No" || selectedCredit === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Issue Resolved
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedIssueResolved}
+                      onChange={handleIssueResolved}
+                    >
+                      {issueResolvedOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Is the customer happy with the resolution?
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedIsCustomer}
+                      onChange={handleIsCustomer}
+                    >
+                      {isCustomerOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
                   }}
                 />
-              </FormControl>
-            </Box>
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
                 >
-                  Appointment Inquiry "Same Day"
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedAppointmentSameday}
-                  onChange={handleSameday}
-                >
-                  {samedayOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Did you provide credit?
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedCredit}
+                      onChange={handleCredit}
+                    >
+                      {creditOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Credit Amount
+                    </FormLabel>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      value={creditAmount}
+                      onChange={(e) => setCreditAmount(e.target.value)}
+                      inputProps={{ maxLength: 6 }}
+                      disabled={
+                        selectedCredit === "No" || selectedCredit === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedCredit === "No" || selectedCredit === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
                     />
-                  ))}
-                </RadioGroup>
+                  </FormControl>
 
-                {/* Dropdown added here */}
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  value={sameDayDropdown}
-                  onChange={(event) => setsameDayDropdown(event.target.value)}
-                  displayEmpty
-                  disabled={
-                    selectedAppointmentSameday === "No" ||
-                    selectedAppointmentSameday === ""
-                  }
-                  sx={{
-                    cursor:
-                      selectedAppointmentSameday === "No" ||
-                      selectedAppointmentSameday === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>Select an option</em>
-                  </MenuItem>
-                  {samedaydropdownOptions.map((option) => (
-                    <MenuItem key={option.id} value={option.item_name}>
-                      {option.item_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{
-                    fontWeight: "bold",
-                    marginBottom: 1,
-                    "& .MuiFormLabel-asterisk": {
-                      display: "none", // Hide the default asterisk
-                    },
-                    "&::before": {
-                      content: '"* "', // Adds the asterisk before the label text
-                      color: "red", // Sets the asterisk color to red
-                    },
-                  }}
-                >
-                  Focus Call Drivers
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedCallDriver}
-                  onChange={handlecallDrivers}
-                >
-                  {driverOption.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Credit Approver's ATTUID
+                    </FormLabel>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      value={creditAttuid}
+                      onChange={(e) => setCreditAttuid(e.target.value)}
+                      inputProps={{ maxLength: 6 }}
+                      disabled={
+                        selectedCredit === "No" || selectedCredit === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedCredit === "No" || selectedCredit === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
                     />
-                  ))}
-                </RadioGroup>
-
-                {/* Dropdown added here */}
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  value={callDriverDropdown}
-                  onChange={(event) =>
-                    setcallDriverDropdown(event.target.value)
-                  }
-                  displayEmpty
-                  disabled={
-                    selectedCallDriver === "No" || selectedCallDriver === ""
-                  }
-                  sx={{
-                    cursor:
-                      selectedCallDriver === "No" || selectedCallDriver === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>Select an option</em>
-                  </MenuItem>
-                  {callDriverdropdownOptions.map((option) => (
-                    <MenuItem key={option.id} value={option.item_name}>
-                      {option.item_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Repeat Prediction
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedRepeatPrediction}
-                  onChange={handlerepeatprediction}
-                >
-                  {repeatPredictionOption.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Box>
-
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
-
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  PPLAN CLOSED
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedPplan}
-                  onChange={handlePplan}
-                >
-                  {pplanOption.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedPplan2}
-                  onChange={handlepplan2}
-                  sx={{
-                    // marginRight: 3,
-                    cursor:
-                      selectedPplan === "No" || selectedPplan === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
-                >
-                  {pplanOption2.map((option) => (
-                    <FormControlLabel
-                      disabled={selectedPplan === "No" || selectedPplan == ""}
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Box>
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Dispatch Call/Equipment Replacement
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedDispatch}
-                  onChange={handleDispatch}
-                >
-                  {dipatchOption.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Due Date
-                </FormLabel>
-                <TextField
-                  type="date" // Change to date selector
-                  variant="outlined"
-                  fullWidth
-                  value={dueDate}
-                  onChange={(e) => setdueDate(e.target.value)} // Adjust handler to store date
-                  disabled={
-                    selectedDispatch === "N/A" || selectedDispatch === ""
-                  }
-                  sx={{
-                    cursor:
-                      selectedDispatch === "N/A" || selectedDispatch === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
-                  InputLabelProps={{
-                    shrink: true, // Ensures label is visible even when no date is selected
+                  </FormControl>
+                </Box>
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
                   }}
                 />
-              </FormControl>
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
+                >
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Appointment Inquiry "Same Day"
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedAppointmentSameday}
+                      onChange={handleSameday}
+                    >
+                      {samedayOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
 
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Select Time
-                </FormLabel>
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  value={selectTime}
-                  onChange={(event) => setTime(event.target.value)}
-                  displayEmpty
-                  disabled={
-                    selectedDispatch === "N/A" || selectedDispatch === ""
-                  }
-                  sx={{
-                    cursor:
-                      selectedDispatch === "N/A" || selectedDispatch === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
-                >
-                  <MenuItem value="">
-                    <em>Select Time</em>
-                  </MenuItem>
-                  {timeOption.map((option) => (
-                    <MenuItem key={option.id} value={option.item_name}>
-                      {option.item_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-              width={390}
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
-                >
-                  Dispatch/Equipment Replacement Approver's ATTUID
-                </FormLabel>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  value={dispatchEquipment}
-                  inputProps={{ maxLength: 6 }}
-                  onChange={(e) => setdispatchEquipment(e.target.value)}
-                  disabled={
-                    selectedDispatch === "N/A" || selectedDispatch === ""
-                  }
-                  sx={{
-                    cursor:
-                      selectedDispatch === "N/A" || selectedDispatch === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
+                    {/* Dropdown added here */}
+                    <Select
+                      variant="outlined"
+                      fullWidth
+                      value={sameDayDropdown}
+                      onChange={(event) =>
+                        setsameDayDropdown(event.target.value)
+                      }
+                      displayEmpty
+                      disabled={
+                        selectedAppointmentSameday === "No" ||
+                        selectedAppointmentSameday === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedAppointmentSameday === "No" ||
+                          selectedAppointmentSameday === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select an option</em>
+                      </MenuItem>
+                      {samedaydropdownOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.item_name}>
+                          {option.item_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{
+                        fontWeight: "bold",
+                        marginBottom: 1,
+                        "& .MuiFormLabel-asterisk": {
+                          display: "none", // Hide the default asterisk
+                        },
+                        "&::before": {
+                          content: '"* "', // Adds the asterisk before the label text
+                          color: "red", // Sets the asterisk color to red
+                        },
+                      }}
+                    >
+                      Focus Call Drivers
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedCallDriver}
+                      onChange={handlecallDrivers}
+                    >
+                      {driverOption.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+
+                    {/* Dropdown added here */}
+                    <Select
+                      variant="outlined"
+                      fullWidth
+                      value={callDriverDropdown}
+                      onChange={(event) =>
+                        setcallDriverDropdown(event.target.value)
+                      }
+                      displayEmpty
+                      disabled={
+                        selectedCallDriver === "No" || selectedCallDriver === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedCallDriver === "No" ||
+                          selectedCallDriver === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select an option</em>
+                      </MenuItem>
+                      {callDriverdropdownOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.item_name}>
+                          {option.item_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Repeat Prediction
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedRepeatPrediction}
+                      onChange={handlerepeatprediction}
+                    >
+                      {repeatPredictionOption.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
                   }}
                 />
-              </FormControl>
-            </Box>
 
-            <hr
-              style={{
-                border: "1px dotted black",
-                margin: "1px 0",
-              }}
-            />
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
+                >
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      PPLAN CLOSED
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedPplan}
+                      onChange={handlePplan}
+                    >
+                      {pplanOption.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
 
-            <Box
-              padding={1} // Horizontal padding (left and right)
-              display="flex"
-              gap={3}
-              alignItems="flex-start"
-              flexWrap="wrap"
-            >
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedPplan2}
+                      onChange={handlepplan2}
+                      sx={{
+                        // marginRight: 3,
+                        cursor:
+                          selectedPplan === "No" || selectedPplan === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      {pplanOption2.map((option) => (
+                        <FormControlLabel
+                          disabled={
+                            selectedPplan === "No" || selectedPplan == ""
+                          }
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
+                  }}
+                />
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
                 >
-                  WMT Process Opportunities
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedWMT}
-                  onChange={handleWMT}
-                >
-                  {wmtOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Dispatch Call/Equipment Replacement
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedDispatch}
+                      onChange={handleDispatch}
+                    >
+                      {dipatchOption.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Due Date
+                    </FormLabel>
+                    <TextField
+                      type="date" // Change to date selector
+                      variant="outlined"
+                      fullWidth
+                      value={dueDate}
+                      onChange={(e) => setdueDate(e.target.value)} // Adjust handler to store date
+                      disabled={
+                        selectedDispatch === "N/A" || selectedDispatch === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedDispatch === "N/A" || selectedDispatch === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                      InputLabelProps={{
+                        shrink: true, // Ensures label is visible even when no date is selected
+                      }}
                     />
-                  ))}
-                </RadioGroup>
+                  </FormControl>
 
-                {/* Dropdown added here */}
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  value={wmtDropdown}
-                  onChange={(event) => setwmtDropdown(event.target.value)}
-                  displayEmpty
-                  disabled={selectedWMT === "No" || selectedWMT === ""}
-                  sx={{
-                    cursor:
-                      selectedWMT === "No" || selectedWMT === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
-                  }}
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Select Time
+                    </FormLabel>
+                    <Select
+                      variant="outlined"
+                      fullWidth
+                      value={selectTime}
+                      onChange={(event) => setTime(event.target.value)}
+                      displayEmpty
+                      disabled={
+                        selectedDispatch === "N/A" || selectedDispatch === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedDispatch === "N/A" || selectedDispatch === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select Time</em>
+                      </MenuItem>
+                      {timeOption.map((option) => (
+                        <MenuItem key={option.id} value={option.item_name}>
+                          {option.item_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
+                  width={390}
                 >
-                  <MenuItem value="">
-                    <em>Select an option</em>
-                  </MenuItem>
-                  {wmtDropdownOptions.map((option) => (
-                    <MenuItem key={option.id} value={option.item_name}>
-                      {option.item_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-
-              <FormControl
-                component="fieldset"
-                sx={{ flex: 1, marginBottom: 2 }}
-              >
-                <FormLabel
-                  component="legend"
-                  required
-                  sx={{
-                    fontWeight: "bold",
-                    marginBottom: 1,
-                    "& .MuiFormLabel-asterisk": {
-                      display: "none", // Hide the default asterisk
-                    },
-                    "&::before": {
-                      content: '"* "', // Adds the asterisk before the label text
-                      color: "red", // Sets the asterisk color to red
-                    },
-                  }}
-                >
-                  Tool Issue (Genesys)
-                </FormLabel>
-                <RadioGroup
-                  row
-                  aria-label="call-type"
-                  name="call-type"
-                  value={selectedToolIssue}
-                  onChange={handleToolIssue}
-                >
-                  {ToolissueOptions.map((option) => (
-                    <FormControlLabel
-                      key={option.id}
-                      value={option.item_name}
-                      control={<Radio />}
-                      label={option.item_name}
-                      sx={{ marginRight: 3 }}
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      Dispatch/Equipment Replacement Approver's ATTUID
+                    </FormLabel>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      value={dispatchEquipment}
+                      inputProps={{ maxLength: 6 }}
+                      onChange={(e) => setdispatchEquipment(e.target.value)}
+                      disabled={
+                        selectedDispatch === "N/A" || selectedDispatch === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedDispatch === "N/A" || selectedDispatch === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
                     />
-                  ))}
-                </RadioGroup>
+                  </FormControl>
+                </Box>
 
-                {/* Dropdown added here */}
-                <Select
-                  variant="outlined"
-                  fullWidth
-                  value={toolIssueDropdown}
-                  onChange={(event) =>
-                    settoolIssueDropdown(event.target.value)
-                  }
-                  displayEmpty
-                  disabled={
-                    selectedToolIssue === "No" || selectedToolIssue === ""
-                  }
-                  sx={{
-                    cursor:
-                    selectedToolIssue === "No" || selectedToolIssue === ""
-                        ? "not-allowed"
-                        : "pointer",
-                    "& .Mui-disabled": { cursor: "not-allowed" },
+                <hr
+                  style={{
+                    border: "1px dotted black",
+                    margin: "1px 0",
                   }}
+                />
+
+                <Box
+                  padding={1} // Horizontal padding (left and right)
+                  display="flex"
+                  gap={3}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
                 >
-                  <MenuItem value="">
-                    <em>Select an option</em>
-                  </MenuItem>
-                  {ToolIssueDropdownOptions.map((option) => (
-                    <MenuItem key={option.id} value={option.item_name}>
-                      {option.item_name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{ fontWeight: "bold", marginBottom: 1 }}
+                    >
+                      WMT Process Opportunities
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedWMT}
+                      onChange={handleWMT}
+                    >
+                      {wmtOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+
+                    {/* Dropdown added here */}
+                    <Select
+                      variant="outlined"
+                      fullWidth
+                      value={wmtDropdown}
+                      onChange={(event) => setwmtDropdown(event.target.value)}
+                      displayEmpty
+                      disabled={selectedWMT === "No" || selectedWMT === ""}
+                      sx={{
+                        cursor:
+                          selectedWMT === "No" || selectedWMT === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select an option</em>
+                      </MenuItem>
+                      {wmtDropdownOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.item_name}>
+                          {option.item_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl
+                    component="fieldset"
+                    sx={{ flex: 1, marginBottom: 2 }}
+                  >
+                    <FormLabel
+                      component="legend"
+                      required
+                      sx={{
+                        fontWeight: "bold",
+                        marginBottom: 1,
+                        "& .MuiFormLabel-asterisk": {
+                          display: "none", // Hide the default asterisk
+                        },
+                        "&::before": {
+                          content: '"* "', // Adds the asterisk before the label text
+                          color: "red", // Sets the asterisk color to red
+                        },
+                      }}
+                    >
+                      Tool Issue (Genesys)
+                    </FormLabel>
+                    <RadioGroup
+                      row
+                      aria-label="call-type"
+                      name="call-type"
+                      value={selectedToolIssue}
+                      onChange={handleToolIssue}
+                    >
+                      {ToolissueOptions.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.item_name}
+                          control={<Radio />}
+                          label={option.item_name}
+                          sx={{ marginRight: 3 }}
+                        />
+                      ))}
+                    </RadioGroup>
+
+                    {/* Dropdown added here */}
+                    <Select
+                      variant="outlined"
+                      fullWidth
+                      value={toolIssueDropdown}
+                      onChange={(event) =>
+                        settoolIssueDropdown(event.target.value)
+                      }
+                      displayEmpty
+                      disabled={
+                        selectedToolIssue === "No" || selectedToolIssue === ""
+                      }
+                      sx={{
+                        cursor:
+                          selectedToolIssue === "No" || selectedToolIssue === ""
+                            ? "not-allowed"
+                            : "pointer",
+                        "& .Mui-disabled": { cursor: "not-allowed" },
+                      }}
+                    >
+                      <MenuItem value="">
+                        <em>Select an option</em>
+                      </MenuItem>
+                      {ToolIssueDropdownOptions.map((option) => (
+                        <MenuItem key={option.id} value={option.item_name}>
+                          {option.item_name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+              </>
+            )}
           </>
         )}
       </Paper>
