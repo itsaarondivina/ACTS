@@ -23,4 +23,5 @@ urlpatterns = [
     path('user_admin/', include('backend.user_admin_urls')),  # Include the app's URL configuration
     path('category/', include('backend.category_urls')),  # Include the app's URL configuration
     path('dropdownlookup/', include('backend.dropdown_lookup_urls')),  # Include the app's URL configuration
+    path('agentcts/', include('backend.agentCts_urls')),  # Include the app's URL configuration
 ]
