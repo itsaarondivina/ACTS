@@ -14,10 +14,15 @@ import {
   FormHelperText,
   MenuItem,
   Select,
+  CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import ClearIcon from "@mui/icons-material/Clear";
-import { fetchLookup } from "../utils/api";
+import { fetchLookup, saveAgentCtsItem } from "../utils/api";
+import { getTLOMdetails } from "../utils/authentication";
+import ScrollToTopButton from "../utils/scrolltoTop";
 
 interface LookupItem {
   id: number;
@@ -76,6 +81,14 @@ const AgentForm: React.FC = () => {
 
     fetchData();
   }, []);
+
+  const authTokenString = sessionStorage.getItem("authToken");
+  const authToken = authTokenString ? JSON.parse(authTokenString) : null;
+  // const profilePic = authToken?.profilepicture || "/path/to/default-image.png";
+  const fullName = authToken?.name || "User";
+  const id = authToken?.id || "User";
+  const tl_id = authToken?.tl_Id || "User";
+  const Country = authToken?.Country || "User";
 
   // Filter choices with category_id 1 for the Call Type options
   const callTypeOptions = lookup.filter(
@@ -586,37 +599,84 @@ const AgentForm: React.FC = () => {
     settoolIssueDropdown("");
   };
 
-  const handleSave = () => {
-    // Log selected values when Save is pressed
-    console.log("Form Data:");
-    console.log("Selected Call Type:", selectedCallType);
-    console.log("Selected Account Type:", selectedAccountType);
-    console.log("Case ID:", caseId);
-    console.log("Area CTV:", areaCtv);
-    console.log("Sub Area:", subArea);
-    console.log("Selected Transfer Call:", selectedTransferCall);
-    console.log("Transfer Destination:", transferDestination);
-    console.log("Transfer ATTUID:", transferAttuid);
-    console.log("Selected Issue Resolved:", selectedIssueResolved);
-    console.log("Selected Is Customer:", selectedIsCustomer);
-    console.log("Selected Credit:", selectedCredit);
-    console.log("Credit Amount:", creditAmount);
-    console.log("Credit ATTUID:", creditAttuid);
-    console.log("Selected Appointment Same Day:", selectedAppointmentSameday);
-    console.log("Same Day Dropdown:", sameDayDropdown);
-    console.log("Selected Call Driver:", selectedCallDriver);
-    console.log("Call Driver Dropdown:", callDriverDropdown);
-    console.log("Selected Repeat Prediction:", selectedRepeatPrediction);
-    console.log("Selected PPlan:", selectedPplan);
-    console.log("Selected PPlan2:", selectedPplan2);
-    console.log("Selected Dispatch:", selectedDispatch);
-    console.log("Due Date:", dueDate);
-    console.log("Select Time:", selectTime);
-    console.log("Dispatch Equipment:", dispatchEquipment);
-    console.log("Selected WMT:", selectedWMT);
-    console.log("WMT Dropdown:", wmtDropdown);
-    console.log("Selected Tool Issue:", selectedToolIssue);
-    console.log("Tool Issue Dropdown:", toolIssueDropdown);
+  const [loading, setLoading] = useState(false); // State to control loader visibility
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // State to open the Snackbar
+  const [snackbarMessage, setSnackbarMessage] = useState(""); // State for Snackbar message
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">(
+    "success"
+  ); // Type of severity
+
+  const handleSave = async () => {
+    setLoading(true); // Show loader when save is clicked
+    setSnackbarOpen(false); // Close Snackbar before new action
+    setSnackbarMessage(""); // Clear previous message
+
+    const tlDetails = await getTLOMdetails(tl_id);
+    console.log("TL Details: main page", tlDetails);
+
+    const omDetails = await getTLOMdetails(tlDetails?.supervisor || "");
+    console.log("OM Details: main page", omDetails);
+
+    const AgentCts = {
+      call_type: selectedCallType || null,
+      account_type: selectedAccountType || null,
+      case_id: caseId || null,
+      area: areaCtv || null,
+      sub_area: subArea || null,
+      transfer_call: selectedTransferCall || null,
+      transfer_destination: transferDestination || null,
+      transfer_attuid: transferAttuid || null,
+      issue_resolved: selectedIssueResolved || null,
+      is_customer_happy: selectedIsCustomer || null,
+      provide_credit: selectedCredit || null,
+      credit_amount: creditAmount || null,
+      credit_attuid: creditAttuid || null,
+      appointment_sameday: selectedAppointmentSameday || null,
+      appointment_sameday_2: sameDayDropdown || null,
+      focus_driver: selectedCallDriver || null,
+      focus_driver_2: callDriverDropdown || null,
+      repeat_prediction: selectedRepeatPrediction || null,
+      pplan_close: selectedPplan || null,
+      pplan_close_2: selectedPplan2 || null,
+      dispatch_call: selectedDispatch || null,
+      due_date: dueDate || null,
+      select_time: selectTime || null,
+      dispatch_equipment: dispatchEquipment || null,
+      wmt: selectedWMT || null,
+      wmt_2: wmtDropdown || null,
+      tool_issue: selectedToolIssue || null,
+      tool_issue_2: toolIssueDropdown || null,
+      is_active: true,
+      created_by: id || null,
+      updated_by: id || null,
+      full_name: fullName || null,
+      region: Country || null,
+      tl_hrid: tl_id || null,
+      tl_name: tlDetails?.name || null,
+      om_name: omDetails?.name || null,
+      om_hrid: omDetails?.id || null,
+    };
+
+    console.log("AgentCts", AgentCts);
+
+    try {
+      const response = await saveAgentCtsItem(AgentCts);
+      console.log("Save successful:", response);
+      clearForm();
+      setSnackbarMessage("Save successful!");
+      setSnackbarSeverity("success");
+    } catch (error) {
+      console.error("Save failed:", error);
+      setSnackbarMessage("Save failed. Please try again.");
+      setSnackbarSeverity("error");
+    } finally {
+      setLoading(false); // Hide loader after process completes
+      setSnackbarOpen(true); // Open Snackbar after save attempt
+    }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false); // Close Snackbar when the user dismisses it
   };
 
   return (
@@ -646,15 +706,16 @@ const AgentForm: React.FC = () => {
         <Button
           variant="contained"
           color="success"
-          startIcon={<SaveIcon />}
-          onClick={handleSave} // Attach the save handler here
+          startIcon={loading ? <CircularProgress size={24} /> : <SaveIcon />}
+          onClick={handleSave}
           disabled={
-            !isFormComplete &&
-            selectedCallType !== "Ghost Call" &&
-            !isFormComplete2
+            (!isFormComplete &&
+              selectedCallType !== "Ghost Call" &&
+              !isFormComplete2) ||
+            loading // Disable button when loading
           }
         >
-          Save
+          {loading ? "Saving..." : "Save"}
         </Button>
         <Button
           variant="contained"
@@ -664,6 +725,22 @@ const AgentForm: React.FC = () => {
         >
           Clear
         </Button>
+
+        {/* Snackbar for displaying success or error message */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+          sx={{ mt: 8, width: "800px" }}
+          anchorOrigin={{
+            vertical: "top", // Position at the top
+            horizontal: "right", // Position at the right
+          }}
+        >
+          <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Box>
 
       <Typography
@@ -1725,6 +1802,10 @@ const AgentForm: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Box>
+                <div>
+                  <ScrollToTopButton /> {/* Render the scroll to top button */}
+                  {/* Other content of the page */}
+                </div>
               </>
             )}
           </>

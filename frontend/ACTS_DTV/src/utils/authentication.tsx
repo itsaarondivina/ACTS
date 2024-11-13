@@ -9,6 +9,13 @@ export interface EmployeeDetails {
   // Add other fields based on actual API response structure
 }
 
+export interface TLOMDetails {
+  id: string;
+  name: string;
+  supervisor : string;
+  // Add other fields based on actual API response structure
+}
+
 export const getEmployeeDetails = async (hrid: string, hireDate: string): Promise<EmployeeDetails> => {
   try {
     // console.log("API HIREDATE", hireDate);
@@ -17,7 +24,7 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
     );
 
     const user = response.data.UserInfo;
-    // console.log("USER :", user);
+    console.log("USER :", user);
 
     // Check if the Table property is null or empty
     if (!user || !user.ID) {
@@ -44,6 +51,8 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
             id: user.ID,
             name: user.FirstName +' ' + user.LastName,
             hireDate: user.HireDate,
+            country : user.Country,
+            tl_Id : user.SupervisorID,
             profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
             // Add other fields as needed
           }));
@@ -59,6 +68,8 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
               id: user.ID,
               name: user.FirstName +' ' + user.LastName,
               hireDate: user.HireDate,
+              country : user.Country,
+              tl_Id : user.SupervisorID,
               profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
             }));            
           } else{
@@ -80,6 +91,27 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
     throw error; // Rethrow the error for handling in the component
   }
 };
+
+export const getTLOMdetails = async (hrid: string): Promise<TLOMDetails> => {
+  try {
+    const response = await axios.get(
+      `https://vxicareers.com/srv2-api/api/v1/login/GetEmpDetailsOnGlobalAPI?nt=${hrid}&domain=VXIPHP`
+    );
+
+    const user = response.data.UserInfo;
+    console.log("USER :", user);
+
+    return {
+      id: user.ID,
+      name: user.FirstName +" "+ user.LastName,
+      supervisor : user.SupervisorID
+    };
+  } catch (error) {
+    console.error("Error fetching employee details:", error);
+    throw error; // Rethrow the error for handling in the component
+  }
+};
+
 
 export const isAuthenticated = () => {
   try {
