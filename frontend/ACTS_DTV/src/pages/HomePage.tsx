@@ -29,13 +29,36 @@ interface LookupItem {
 
 const AgentForm: React.FC = () => {
   const [lookup, setLookupItems] = useState<LookupItem[]>([]);
-  const [selectedCallType, setSelectedCallType] = useState<string>(""); // State to hold selected call type
-  const [selectedTransferCall, setSelectedTransferCall] = useState<string>(""); // State to hold selected call type
-  const [selectedAccountType, setSelectedAccountType] = useState<string>(""); // State to hold selected account type
+  const [selectedCallType, setSelectedCallType] = useState<string>("");
+  const [selectedTransferCall, setSelectedTransferCall] = useState<string>("");
+  const [selectedIssueResolved, setIssueResolved] = useState<string>("");
+  const [selectedIsCustomer, setIsCustomer] = useState<string>("");
+  const [selectedAccountType, setSelectedAccountType] = useState<string>("");
+  const [selectedCredit, setSelectedCredit] = useState<string>("");
+  const [selectedRepeatPrediction, setRepeatPrediction] = useState<string>(""); // State to hold selected account type
+  const [selectedPplan, setPplan] = useState<string>(""); // State to hold selected account type
+  const [selectedDispatch, setDispatch] = useState<string>(""); // State to hold selected account type
+  const [selectedPplan2, setPplan2] = useState<string>(""); // State to hold selected account type
+  const [selectedAppointmentSameday, setAppointmentSameday] =
+    useState<string>(""); // State to hold selected account type
+  const [selectedCallDriver, setcallDriver] = useState<string>(""); // State to hold selected account type
   const [caseId, setCaseId] = useState<string>(""); // State for Case ID
+  const [transferAttuid, setTransferAttuid] = useState<string>(""); // State for Case ID
+  const [creditAmount, setCreditAmount] = useState<string>(""); // State for Case ID
+  const [dispatchEquipment, setdispatchEquipment] = useState<string>(""); // State for Case ID
+  const [creditAttuid, setCreditAttuid] = useState<string>(""); // State for Case ID
   const [areaCtv, setArea] = useState<string>(""); // State for Case ID
   const [transferDestination, setTransferDestination] = useState<string>(""); // State for Case ID
+  const [selectTime, setTime] = useState<string>(""); // State for Case ID
+  const [sameDayDropdown, setsameDayDropdown] = useState<string>(""); // State for Case ID
+  const [wmtDropdown, setwmtDropdown] = useState<string>(""); // State for Case ID
+  const [callDriverDropdown, setcallDriverDropdown] = useState<string>(""); // State for Case ID
+  const [toolIssueDropdown, settoolIssueDropdown] = useState<string>(""); // State for Case ID
   const [subArea, setsubArea] = useState<string>(""); // State for Case ID
+  const [dueDate, setdueDate] = useState<string>(""); // State for Case ID
+  const [selectedWMT, setWMT] = useState<string>(""); // State for Case ID
+  const [selectedToolIssue, setToolIssue] = useState<string>(""); // State to hold selected account type
+
   const [subAreaOptions, setSubAreaOptions] = useState<
     { id: number; item_name: string }[]
   >([]);
@@ -70,7 +93,56 @@ const AgentForm: React.FC = () => {
   const transferDestinationOptions = lookup.filter(
     (item) => item.category_id === 4 && item.is_active === true
   );
+  const issueResolvedOptions = lookup.filter(
+    (item) => item.category_id === 5 && item.is_active === true
+  );
+  const isCustomerOptions = lookup.filter(
+    (item) => item.category_id === 6 && item.is_active === true
+  );
+  const creditOptions = lookup.filter(
+    (item) => item.category_id === 7 && item.is_active === true
+  );
+  const samedayOptions = lookup.filter(
+    (item) => item.category_id === 8 && item.is_active === true
+  );
+  const samedaydropdownOptions = lookup.filter(
+    (item) => item.category_id === 20 && item.is_active === true
+  );
+  const callDriverdropdownOptions = lookup.filter(
+    (item) => item.category_id === 21 && item.is_active === true
+  );
+  const driverOption = lookup.filter(
+    (item) => item.category_id === 9 && item.is_active === true
+  );
+  const repeatPredictionOption = lookup.filter(
+    (item) => item.category_id === 10 && item.is_active === true
+  );
 
+  const pplanOption = lookup.filter(
+    (item) => item.category_id === 11 && item.is_active === true
+  );
+  const pplanOption2 = lookup.filter(
+    (item) => item.category_id === 12 && item.is_active === true
+  );
+  const dipatchOption = lookup.filter(
+    (item) => item.category_id === 13 && item.is_active === true
+  );
+  const timeOption = lookup.filter(
+    (item) => item.category_id === 14 && item.is_active === true
+  );
+  const wmtOptions = lookup.filter(
+    (item) => item.category_id === 15 && item.is_active === true
+  );
+  const wmtDropdownOptions = lookup.filter(
+    (item) => item.category_id === 16 && item.is_active === true
+  );
+  const ToolIssueDropdownOptions = lookup.filter(
+    (item) => item.category_id === 18 && item.is_active === true
+  );
+
+  const ToolissueOptions = lookup.filter(
+    (item) => item.category_id === 17 && item.is_active === true
+  );
   const handleCallTypeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedCallType(event.target.value);
     console.log("Selected Call Type: ", event.target.value);
@@ -80,7 +152,77 @@ const AgentForm: React.FC = () => {
     setSelectedTransferCall(event.target.value);
     console.log("Selected Transfer Call: ", event.target.value);
   };
+  const handleIssueResolved = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIssueResolved(event.target.value);
+    console.log("Selected Issue Resolved: ", event.target.value);
+  };
+  const handleIsCustomer = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsCustomer(event.target.value);
+    console.log("Selected Is Customer: ", event.target.value);
+  };
+  const handleCredit = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCredit(event.target.value);
+    console.log("Selected Credit: ", event.target.value);
+  };
+  const handlepplan2 = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPplan2(event.target.value);
+    console.log("Selected Credit: ", event.target.value);
+  };
 
+  const handleSameday = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAppointmentSameday(event.target.value);
+    console.log("Selected SameDay: ", event.target.value);
+    if (event.target.value === "No") {
+      setsameDayDropdown("");
+    }
+  };
+  const handlecallDrivers = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setcallDriver(event.target.value);
+    if (event.target.value === "No") {
+      setcallDriverDropdown("");
+    }
+    console.log("Selected SameDay: ", event.target.value);
+  };
+
+  const handlerepeatprediction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRepeatPrediction(event.target.value);
+    console.log("Selected Repeat Prediction: ", event.target.value);
+  };
+
+  const handlePplan = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPplan(event.target.value);
+    if (event.target.value == "No") {
+      setPplan2("");
+    }
+    console.log("Selected Repeat Prediction: ", event.target.value);
+  };
+
+  const handleDispatch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDispatch(event.target.value);
+    if (event.target.value == "N/A") {
+      setdueDate("");
+      setTime("");
+      setdispatchEquipment("");
+    }
+    console.log("Selected Repeat Prediction: ", event.target.value);
+  };
+
+  const handleWMT = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWMT(event.target.value);
+    console.log("Selected WNT: ", event.target.value);
+    if (event.target.value === "No") {
+      setwmtDropdown("");
+    }
+  };
+  const handleToolIssue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setToolIssue(event.target.value);
+    console.log("Selected WNT: ", event.target.value);
+    if (event.target.value === "No") {
+      settoolIssueDropdown("");
+    }
+  };
   const handleAreaChange = (event: { target: { value: any } }) => {
     const newValue = event.target.value;
     setArea(newValue);
@@ -407,8 +549,7 @@ const AgentForm: React.FC = () => {
             <hr
               style={{
                 border: "1px dotted black",
-                marginTop: 2,
-                marginBottom: 2,
+                margin: "1px 0",
               }}
             />
             <Box padding={2}>
@@ -442,22 +583,21 @@ const AgentForm: React.FC = () => {
             <hr
               style={{
                 border: "1px dotted black",
-                marginTop: 2,
-                marginBottom: 2,
+                margin: "1px 0",
               }}
             />
 
             {/* Case ID Input Field */}
             <Box
-              padding={2}
+              padding={1} // Horizontal padding (left and right)
               display="flex"
-              gap={2}
+              gap={3}
               alignItems="flex-start"
-              flexWrap="nowrap"
+              flexWrap="wrap"
             >
               <FormControl
                 component="fieldset"
-                sx={{ marginRight: 5, flex: 1 }}
+                sx={{ flex: 1, marginBottom: 2 }}
               >
                 <FormLabel
                   component="legend"
@@ -473,7 +613,6 @@ const AgentForm: React.FC = () => {
                 <TextField
                   variant="outlined"
                   fullWidth
-                  sx={{ width: 1 }}
                   value={caseId}
                   onChange={(e) => setCaseId(e.target.value)}
                   inputProps={{ maxLength: 16 }}
@@ -483,7 +622,7 @@ const AgentForm: React.FC = () => {
 
               <FormControl
                 component="fieldset"
-                sx={{ marginRight: 5, flex: 1 }}
+                sx={{ flex: 1, marginBottom: 2 }}
               >
                 <FormLabel
                   component="legend"
@@ -499,20 +638,21 @@ const AgentForm: React.FC = () => {
                 <Select
                   variant="outlined"
                   fullWidth
-                  sx={{
-                    width: 1,
-                    cursor:
-                      selectedAccountType === "No Account"
-                        ? "not-allowed"
-                        : "pointer", // Change pointer style based on condition
-                    "& .Mui-disabled": {
-                      cursor: "not-allowed", // Ensure cursor is 'not-allowed' when disabled
-                    },
-                  }}
                   value={areaCtv}
                   onChange={handleAreaChange}
                   displayEmpty
-                  disabled={selectedAccountType === "No Account"} // Use curly braces for the condition
+                  disabled={
+                    selectedAccountType === "No Account" ||
+                    selectedAccountType === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedAccountType === "No Account" ||
+                      selectedAccountType === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
                 >
                   <MenuItem value="">
                     <em>Select an option</em>
@@ -525,7 +665,10 @@ const AgentForm: React.FC = () => {
                 </Select>
               </FormControl>
 
-              <FormControl component="fieldset" sx={{ flex: 1 }}>
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
                 <FormLabel
                   component="legend"
                   required
@@ -540,20 +683,23 @@ const AgentForm: React.FC = () => {
                 <Select
                   variant="outlined"
                   fullWidth
-                  sx={{
-                    width: 1,
-                    cursor:
-                      selectedAccountType === "No Account"
-                        ? "not-allowed"
-                        : "pointer", // Change pointer style based on condition
-                    "& .Mui-disabled": {
-                      cursor: "not-allowed", // Ensure cursor is 'not-allowed' when disabled
-                    },
-                  }}
                   value={subArea}
                   onChange={(e) => setsubArea(e.target.value)}
                   displayEmpty
-                  disabled={selectedAccountType === "No Account"} // Use curly braces for the condition
+                  disabled={
+                    selectedAccountType === "No Account" ||
+                    selectedAccountType === "" ||
+                    areaCtv == ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedAccountType === "No Account" ||
+                      selectedAccountType === "" ||
+                      areaCtv === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
                 >
                   <MenuItem value="">
                     <em>Select an option</em>
@@ -566,21 +712,25 @@ const AgentForm: React.FC = () => {
                 </Select>
               </FormControl>
             </Box>
+
             <hr
               style={{
                 border: "1px dotted black",
-                marginTop: 2,
-                marginBottom: 2,
+                margin: "1px 0",
               }}
             />
+
             <Box
-              padding={2}
+              padding={1} // Horizontal padding (left and right)
               display="flex"
-              gap={2}
+              gap={3}
               alignItems="flex-start"
-              flexWrap="nowrap"
+              flexWrap="wrap"
             >
-              <FormControl component="fieldset">
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
                 <FormLabel
                   component="legend"
                   required
@@ -601,8 +751,7 @@ const AgentForm: React.FC = () => {
                       value={option.item_name}
                       control={<Radio />}
                       label={option.item_name}
-                      sx={{ marginRight: 22 }} // Add space between options
-
+                      sx={{ marginRight: 3 }}
                     />
                   ))}
                 </RadioGroup>
@@ -610,7 +759,7 @@ const AgentForm: React.FC = () => {
 
               <FormControl
                 component="fieldset"
-                sx={{ marginRight: 5, flex: 1 }}
+                sx={{ flex: 1, marginBottom: 2 }}
               >
                 <FormLabel
                   component="legend"
@@ -622,20 +771,22 @@ const AgentForm: React.FC = () => {
                 <Select
                   variant="outlined"
                   fullWidth
-                  sx={{
-                    width: 1,
-                    cursor:
-                      selectedTransferCall === "No" ? "not-allowed" : "pointer", // Change pointer style based on condition
-                    "& .Mui-disabled": {
-                      cursor: "not-allowed", // Ensure cursor is 'not-allowed' when disabled
-                    },
-                  }}
                   value={transferDestination}
                   onChange={(event) =>
-                    setTransferDestination(event.target.value as string)
-                  } // Ensure correct type
+                    setTransferDestination(event.target.value)
+                  }
                   displayEmpty
-                  disabled={selectedTransferCall === "No"} // Use curly braces for the condition
+                  disabled={
+                    selectedTransferCall === "No" || selectedTransferCall === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedTransferCall === "No" ||
+                      selectedTransferCall === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
                 >
                   <MenuItem value="">
                     <em>Select an option</em>
@@ -650,7 +801,7 @@ const AgentForm: React.FC = () => {
 
               <FormControl
                 component="fieldset"
-                sx={{ marginRight: 5, flex: 1 }}
+                sx={{ flex: 1, marginBottom: 2 }}
               >
                 <FormLabel
                   component="legend"
@@ -662,12 +813,734 @@ const AgentForm: React.FC = () => {
                 <TextField
                   variant="outlined"
                   fullWidth
-                  sx={{ width: 1 }}
-                  value={caseId}
-                  onChange={(e) => setCaseId(e.target.value)}
+                  value={transferAttuid}
+                  onChange={(e) => setTransferAttuid(e.target.value)}
                   inputProps={{ maxLength: 6 }}
-                  disabled={selectedTransferCall === "No"}
+                  disabled={
+                    selectedTransferCall === "No" || selectedTransferCall === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedTransferCall === "No" ||
+                      selectedTransferCall === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
                 />
+              </FormControl>
+            </Box>
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Issue Resolved
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedIssueResolved}
+                  onChange={handleIssueResolved}
+                >
+                  {issueResolvedOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Is the customer happy with the resolution?
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedIsCustomer}
+                  onChange={handleIsCustomer}
+                >
+                  {isCustomerOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Box>
+
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Did you provide credit?
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedCredit}
+                  onChange={handleCredit}
+                >
+                  {creditOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Credit Amount
+                </FormLabel>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  value={creditAmount}
+                  onChange={(e) => setCreditAmount(e.target.value)}
+                  inputProps={{ maxLength: 6 }}
+                  disabled={selectedCredit === "No" || selectedCredit === ""}
+                  sx={{
+                    cursor:
+                      selectedCredit === "No" || selectedCredit === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                />
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Credit Approver's ATTUID
+                </FormLabel>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  value={creditAttuid}
+                  onChange={(e) => setCreditAttuid(e.target.value)}
+                  inputProps={{ maxLength: 6 }}
+                  disabled={selectedCredit === "No" || selectedCredit === ""}
+                  sx={{
+                    cursor:
+                      selectedCredit === "No" || selectedCredit === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                />
+              </FormControl>
+            </Box>
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Appointment Inquiry "Same Day"
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedAppointmentSameday}
+                  onChange={handleSameday}
+                >
+                  {samedayOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+
+                {/* Dropdown added here */}
+                <Select
+                  variant="outlined"
+                  fullWidth
+                  value={sameDayDropdown}
+                  onChange={(event) => setsameDayDropdown(event.target.value)}
+                  displayEmpty
+                  disabled={
+                    selectedAppointmentSameday === "No" ||
+                    selectedAppointmentSameday === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedAppointmentSameday === "No" ||
+                      selectedAppointmentSameday === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select an option</em>
+                  </MenuItem>
+                  {samedaydropdownOptions.map((option) => (
+                    <MenuItem key={option.id} value={option.item_name}>
+                      {option.item_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{
+                    fontWeight: "bold",
+                    marginBottom: 1,
+                    "& .MuiFormLabel-asterisk": {
+                      display: "none", // Hide the default asterisk
+                    },
+                    "&::before": {
+                      content: '"* "', // Adds the asterisk before the label text
+                      color: "red", // Sets the asterisk color to red
+                    },
+                  }}
+                >
+                  Focus Call Drivers
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedCallDriver}
+                  onChange={handlecallDrivers}
+                >
+                  {driverOption.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+
+                {/* Dropdown added here */}
+                <Select
+                  variant="outlined"
+                  fullWidth
+                  value={callDriverDropdown}
+                  onChange={(event) =>
+                    setcallDriverDropdown(event.target.value)
+                  }
+                  displayEmpty
+                  disabled={
+                    selectedCallDriver === "No" || selectedCallDriver === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedCallDriver === "No" || selectedCallDriver === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select an option</em>
+                  </MenuItem>
+                  {callDriverdropdownOptions.map((option) => (
+                    <MenuItem key={option.id} value={option.item_name}>
+                      {option.item_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Repeat Prediction
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedRepeatPrediction}
+                  onChange={handlerepeatprediction}
+                >
+                  {repeatPredictionOption.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Box>
+
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  PPLAN CLOSED
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedPplan}
+                  onChange={handlePplan}
+                >
+                  {pplanOption.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedPplan2}
+                  onChange={handlepplan2}
+                  sx={{
+                    // marginRight: 3,
+                    cursor:
+                      selectedPplan === "No" || selectedPplan === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  {pplanOption2.map((option) => (
+                    <FormControlLabel
+                      disabled={selectedPplan === "No" || selectedPplan == ""}
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Box>
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Dispatch Call/Equipment Replacement
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedDispatch}
+                  onChange={handleDispatch}
+                >
+                  {dipatchOption.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Due Date
+                </FormLabel>
+                <TextField
+                  type="date" // Change to date selector
+                  variant="outlined"
+                  fullWidth
+                  value={dueDate}
+                  onChange={(e) => setdueDate(e.target.value)} // Adjust handler to store date
+                  disabled={
+                    selectedDispatch === "N/A" || selectedDispatch === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedDispatch === "N/A" || selectedDispatch === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                  InputLabelProps={{
+                    shrink: true, // Ensures label is visible even when no date is selected
+                  }}
+                />
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Select Time
+                </FormLabel>
+                <Select
+                  variant="outlined"
+                  fullWidth
+                  value={selectTime}
+                  onChange={(event) => setTime(event.target.value)}
+                  displayEmpty
+                  disabled={
+                    selectedDispatch === "N/A" || selectedDispatch === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedDispatch === "N/A" || selectedDispatch === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select Time</em>
+                  </MenuItem>
+                  {timeOption.map((option) => (
+                    <MenuItem key={option.id} value={option.item_name}>
+                      {option.item_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+              width={390}
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  Dispatch/Equipment Replacement Approver's ATTUID
+                </FormLabel>
+                <TextField
+                  variant="outlined"
+                  fullWidth
+                  value={dispatchEquipment}
+                  inputProps={{ maxLength: 6 }}
+                  onChange={(e) => setdispatchEquipment(e.target.value)}
+                  disabled={
+                    selectedDispatch === "N/A" || selectedDispatch === ""
+                  }
+                  sx={{
+                    cursor:
+                      selectedDispatch === "N/A" || selectedDispatch === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                />
+              </FormControl>
+            </Box>
+
+            <hr
+              style={{
+                border: "1px dotted black",
+                margin: "1px 0",
+              }}
+            />
+
+            <Box
+              padding={1} // Horizontal padding (left and right)
+              display="flex"
+              gap={3}
+              alignItems="flex-start"
+              flexWrap="wrap"
+            >
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{ fontWeight: "bold", marginBottom: 1 }}
+                >
+                  WMT Process Opportunities
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedWMT}
+                  onChange={handleWMT}
+                >
+                  {wmtOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+
+                {/* Dropdown added here */}
+                <Select
+                  variant="outlined"
+                  fullWidth
+                  value={wmtDropdown}
+                  onChange={(event) => setwmtDropdown(event.target.value)}
+                  displayEmpty
+                  disabled={selectedWMT === "No" || selectedWMT === ""}
+                  sx={{
+                    cursor:
+                      selectedWMT === "No" || selectedWMT === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select an option</em>
+                  </MenuItem>
+                  {wmtDropdownOptions.map((option) => (
+                    <MenuItem key={option.id} value={option.item_name}>
+                      {option.item_name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+
+              <FormControl
+                component="fieldset"
+                sx={{ flex: 1, marginBottom: 2 }}
+              >
+                <FormLabel
+                  component="legend"
+                  required
+                  sx={{
+                    fontWeight: "bold",
+                    marginBottom: 1,
+                    "& .MuiFormLabel-asterisk": {
+                      display: "none", // Hide the default asterisk
+                    },
+                    "&::before": {
+                      content: '"* "', // Adds the asterisk before the label text
+                      color: "red", // Sets the asterisk color to red
+                    },
+                  }}
+                >
+                  Tool Issue (Genesys)
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-label="call-type"
+                  name="call-type"
+                  value={selectedToolIssue}
+                  onChange={handleToolIssue}
+                >
+                  {ToolissueOptions.map((option) => (
+                    <FormControlLabel
+                      key={option.id}
+                      value={option.item_name}
+                      control={<Radio />}
+                      label={option.item_name}
+                      sx={{ marginRight: 3 }}
+                    />
+                  ))}
+                </RadioGroup>
+
+                {/* Dropdown added here */}
+                <Select
+                  variant="outlined"
+                  fullWidth
+                  value={toolIssueDropdown}
+                  onChange={(event) =>
+                    settoolIssueDropdown(event.target.value)
+                  }
+                  displayEmpty
+                  disabled={
+                    selectedToolIssue === "No" || selectedToolIssue === ""
+                  }
+                  sx={{
+                    cursor:
+                    selectedToolIssue === "No" || selectedToolIssue === ""
+                        ? "not-allowed"
+                        : "pointer",
+                    "& .Mui-disabled": { cursor: "not-allowed" },
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>Select an option</em>
+                  </MenuItem>
+                  {ToolIssueDropdownOptions.map((option) => (
+                    <MenuItem key={option.id} value={option.item_name}>
+                      {option.item_name}
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             </Box>
           </>
