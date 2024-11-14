@@ -111,10 +111,19 @@ export const saveUserManagement = async (userinfo: {
   hrid: string;
 }) => {
   try {
+
+    
+
     // Split hrid by backslashes and log the result
     const hridParts = userinfo.hrid.split("\\");
     console.log("HRID Parts:", hridParts);
 
+    const checkexist = await axios.get(`http://127.0.0.1:8000/user_admin/?SamAccount=${hridParts[1]}`);
+    const exists = checkexist.data && checkexist.data.length > 0; // Adjust based on your actual response structure
+    console.log(exists)
+    if (exists) {
+      throw new Error(`already exist`);
+    }
     // Fetch user details from external API using split parts
     const userapi = await axios.get(
       `https://vxicareers.com/srv2-api/api/v1/login/GetEmpDetailsOnGlobalAPI?nt=${hridParts[1]}&domain=${hridParts[0]}`

@@ -24,15 +24,18 @@ class UserAdminListCreateView(generics.ListCreateAPIView):
     serializer_class = UserAdminSerializer
 
     def get_queryset(self):
-        # Get the 'HRID' parameter from the query string
+        # Get the 'HRID' and 'SamAccount' parameters from the query string
         hrid = self.request.query_params.get('HRID', None)
+        sam_account = self.request.query_params.get('SamAccount', None)
         
-        # If 'HRID' is provided, filter by it
+        # Filter the queryset based on the provided parameters
+        queryset = User_Admin.objects.all()
         if hrid is not None:
-            return User_Admin.objects.filter(HRID=hrid)  # Filter based on HRID
-        
-        # If 'HRID' is not provided, return all objects
-        return User_Admin.objects.all()  # Return all User_Admin objects
+            queryset = queryset.filter(HRID=hrid)  # Filter based on HRID
+        if sam_account is not None:
+            queryset = queryset.filter(SamAccount=sam_account)  # Filter based on SamAccount
+
+        return queryset
 
 
 # Retrieve, update, or delete a specific entry
