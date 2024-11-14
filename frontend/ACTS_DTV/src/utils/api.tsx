@@ -72,6 +72,16 @@ export const fetchLookup = async () => {
   }
 };
 
+export const fetchUserAdmindata = async () => {
+  try {
+    const response = await axios.get("http://127.0.0.1:8000/user_admin/");
+    return response.data; // Assuming the response contains the categories
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
 export const saveLookupItem = async (lookupItem: {
   id?: number; // Optional id for updating
   category_id: number;
@@ -135,7 +145,7 @@ export const saveUserManagement = async (userinfo: {
       HRID: userapi.data.UserInfo.ID,
       FirstName: userapi.data.UserInfo.FirstName,
       LastName: userapi.data.UserInfo.LastName,
-      MiddleName: userapi.data.UserInfo.ID,
+      MiddleName: userapi.data.UserInfo.MiddleName,
       Role: "1",
       BuildingAssignment: userapi.data.UserInfo.LocationDesc,
       SamAccount: userapi.data.UserInfo.WindowsID,
