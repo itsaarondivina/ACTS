@@ -5,6 +5,7 @@ import ProtectedRoute from './components/routings'; // Make sure this component 
 import HomePage from './pages/HomePage';
 import ManageLookups from './pages/ManageLookups'; // Import ManageLookups
 import LoginPage from './pages/Login';
+import UserModule from './pages/user';
 import Navbar from './components/header';
 
 const App: React.FC = () => {
@@ -33,6 +34,14 @@ const App: React.FC = () => {
           }
         />
         {/* Add other protected routes here */}
+        <Route
+          path="/User"
+          element={
+            <ProtectedRoute>
+              <UserModule />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );

@@ -99,7 +99,7 @@ const Navbar: React.FC = () => {
           open={Boolean(anchorElChoices)}
           onClose={handleChoicesClose}
         >
-          <MenuItem onClick={handleChoicesClose}>
+          <MenuItem component={Link} to="/User" onClick={handleChoicesClose}>
           <PeopleIcon sx={{ marginRight: 1 }} />
           User
           </MenuItem>
