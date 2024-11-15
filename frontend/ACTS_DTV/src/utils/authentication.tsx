@@ -53,7 +53,8 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
             hireDate: user.HireDate,
             country : user.Country,
             tl_Id : user.SupervisorID,
-            profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
+            profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`,
+            projectId: user.ProjectID
             // Add other fields as needed
           }));
           // console.log("Auth token saved in sessionStorage:", sessionStorage.getItem('authToken'));
@@ -70,7 +71,8 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string): Promis
               hireDate: user.HireDate,
               country : user.Country,
               tl_Id : user.SupervisorID,
-              profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`
+              profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`,
+              projectId: user.ProjectId
             }));            
           } else{
             throw new Error("No Access");

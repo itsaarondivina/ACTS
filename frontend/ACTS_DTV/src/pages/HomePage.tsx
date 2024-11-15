@@ -88,8 +88,8 @@ const AgentForm: React.FC = () => {
   const fullName = authToken?.name || "User";
   const id = authToken?.id || "User";
   const tl_id = authToken?.tl_Id || "User";
-  const Country = authToken?.Country || "User";
-
+  const Country = authToken?.country || "User";
+  const projId = authToken?.projectId || "User";
   // Filter choices with category_id 1 for the Call Type options
   const callTypeOptions = lookup.filter(
     (item) => item.category_id === 1 && item.is_active === true
@@ -655,6 +655,7 @@ const AgentForm: React.FC = () => {
       tl_name: tlDetails?.name || null,
       om_name: omDetails?.name || null,
       om_hrid: omDetails?.id || null,
+      projectId: projId || null,
     };
 
     console.log("AgentCts", AgentCts);

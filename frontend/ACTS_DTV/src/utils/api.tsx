@@ -1,4 +1,94 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
+
+import * as XLSX from 'xlsx';
+
+export const fetchAndDownloadReport = async (startDate: Date | null, endDate: Date | null) => {
+  try {
+    const response = await axios.get('http://127.0.0.1:8000/agentcts/', {
+      params: {
+        start_date: startDate?.toISOString(),
+        end_date: endDate?.toISOString(),
+      },
+    });
+
+    const data = response.data;
+
+    // Define custom headers for the Excel report
+    const headers = [
+      'Call ID', 'Date Logged', 'HRID', 'Project ID', 'Agent Name', 'Team Leader', 'Operations Manager', 
+      'Call Type', 'Account Type', 'Case ID/Service Request', 'Area/CTV Level 3', 'Sub-Area/CTV Level 4', 
+      'Transfer Call', 'Transfer Destination', 'Transfer approver ATTUID', 'Issue Resolved', 
+      'Is the customer happy with the resolution?', 'Did you Provide Credit?', 'Agent Credit Amount', 
+      'Credit Approvers ATTUID', 'Appointment inquiry "same day"', 'Appointment inquiry "same day" - Selection', 
+      'Focus Call Drivers', 'Focus Call Drivers - Selection', 'Repeat Prediction', 'PPLAN Closed', 
+      'PPLAN', 'Dispatch Call/Equipment Replacement', 'Agent Due Date', 'Agent Time', 
+      'Dispatch/Equipment Replacement Approver\'s ATTUID', 'WMT Process Opportunities', 
+      'Tool Issue (Genesys)', 'Support HRID', 'Reason for Account Review', 'If CallBack', 
+      'Support - Appointment inquiry "same day"', 'Support - Focus Call Drivers', 
+      'Dispatch Call/Equipment Replacement', 'Validated?', 'Due Date', 'Time', 'Sup Intervention Notes'
+    ];
+
+    // Map data to match the order of the headers
+    const mappedData = data.map((item: any) => ({
+      'Call ID': item.case_id,
+      'Date Logged': item.date_created,
+      'HRID': item.created_by,
+      'Project ID': item.project_id,
+      'Agent Name': item.agent_name,
+      'Team Leader': item.team_leader,
+      'Operations Manager': item.operations_manager,
+      'Call Type': item.call_type,
+      'Account Type': item.account_type,
+      'Case ID/Service Request': item.case_id,
+      'Area/CTV Level 3': item.area_3,
+      'Sub-Area/CTV Level 4': item.sub_area_4,
+      'Transfer Call': item.transfer_call,
+      'Transfer Destination': item.transfer_destination,
+      'Transfer approver ATTUID': item.transfer_approver_attuid,
+      'Issue Resolved': item.issue_resolved,
+      'Is the customer happy with the resolution?': item.customer_happy,
+      'Did you Provide Credit?': item.provide_credit,
+      'Agent Credit Amount': item.agent_credit_amount,
+      'Credit Approvers ATTUID': item.credit_approvers_attuid,
+      'Appointment inquiry "same day"': item.appointment_inquiry_same_day,
+      'Appointment inquiry "same day" - Selection': item.appointment_inquiry_same_day_selection,
+      'Focus Call Drivers': item.focus_call_drivers,
+      'Focus Call Drivers - Selection': item.focus_call_drivers_selection,
+      'Repeat Prediction': item.repeat_prediction,
+      'PPLAN Closed': item.pplan_closed,
+      'PPLAN': item.pplan,
+      'Dispatch Call/Equipment Replacement': item.dispatch_equipment_replacement,
+      'Agent Due Date': item.agent_due_date,
+      'Agent Time': item.agent_time,
+      'Dispatch/Equipment Replacement Approver\'s ATTUID': item.dispatch_equipment_replacement_approver_attuid,
+      'WMT Process Opportunities': item.wmt_process_opportunities,
+      'Tool Issue (Genesys)': item.tool_issue_genesys,
+      'Support HRID': item.support_hrid,
+      'Reason for Account Review': item.reason_for_account_review,
+      'If CallBack': item.if_callback,
+      'Support - Appointment inquiry "same day"': item.support_appointment_inquiry_same_day,
+      'Support - Focus Call Drivers': item.support_focus_call_drivers,
+      'Dispatch Call/Equipment Replacement 2': item.dispatch_call_equipment_replacement,
+      'Validated?': item.validated,
+      'Due Date': item.due_date,
+      'Time': item.time,
+      'Sup Intervention Notes': item.sup_intervention_notes
+    }));
+
+    // Convert the mapped data to a worksheet
+    const ws = XLSX.utils.json_to_sheet(mappedData, { header: headers });
+
+    // Create a new workbook and add the worksheet to it
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Report');
+
+    // Generate the Excel file and trigger download
+    XLSX.writeFile(wb, 'Report.xlsx');
+  } catch (error) {
+    console.error('Error fetching data or generating report:', error);
+  }
+};
 
 
 const authTokenString = sessionStorage.getItem("authToken");
@@ -39,6 +129,7 @@ export const saveAgentCtsItem = async (agentCtsItem: {
   updated_by: string | null;
   full_name: string | null;
   tl_hrid: string | null;
+  projectId: string | null;
 }) => {
   try {
     const response = await axios.post(

@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
           <ListIcon sx={{ marginRight: 1 }} />
           Lookups
           </MenuItem>
-          <MenuItem onClick={handleChoicesClose}>
+          <MenuItem component={Link} to="/Report" onClick={handleChoicesClose}>
           <LibraryBooksIcon sx={{ marginRight: 1 }} />
           Report
           </MenuItem>

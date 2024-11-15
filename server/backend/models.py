@@ -105,6 +105,7 @@ class AgentCts (models.Model):
     tl_hrid = models.CharField(max_length=150, null=True)
     om_name = models.CharField(max_length=150, null=True)
     om_hrid = models.CharField(max_length=150, null=True)
+    projectId = models.CharField(max_length=150, null=True)
 
 
     def __str__(self):

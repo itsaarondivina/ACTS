@@ -1,12 +1,18 @@
 // src/App.tsx
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import ProtectedRoute from './components/routings'; // Make sure this component handles redirection
-import HomePage from './pages/HomePage';
-import ManageLookups from './pages/ManageLookups'; // Import ManageLookups
-import LoginPage from './pages/Login';
-import UserModule from './pages/user';
-import Navbar from './components/header';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import ProtectedRoute from "./components/routings"; // Make sure this component handles redirection
+import HomePage from "./pages/HomePage";
+import ManageLookups from "./pages/ManageLookups"; // Import ManageLookups
+import LoginPage from "./pages/Login";
+import UserModule from "./pages/user";
+import Report from "./pages/Report";
+import Navbar from "./components/header";
 
 const App: React.FC = () => {
   const location = useLocation(); // Get the current location
@@ -14,7 +20,7 @@ const App: React.FC = () => {
   return (
     <div>
       {/* Render Navbar only if not on the login page */}
-      {location.pathname !== '/login' && <Navbar />}
+      {location.pathname !== "/login" && <Navbar />}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route
@@ -39,6 +45,15 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <UserModule />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/Report"
+          element={
+            <ProtectedRoute>
+              <Report />
             </ProtectedRoute>
           }
         />
