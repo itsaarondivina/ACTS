@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 
@@ -31,53 +32,78 @@ export const fetchAndDownloadReport = async (startDate: Date | null, endDate: Da
 
     // Map data to match the order of the headers
     const mappedData = data.map((item: any) => ({
-      'Call ID': item.case_id,
+      'Call ID': item.id,
       'Date Logged': item.date_created,
       'HRID': item.created_by,
-      'Project ID': item.project_id,
-      'Agent Name': item.agent_name,
-      'Team Leader': item.team_leader,
-      'Operations Manager': item.operations_manager,
+      'Project ID': item.projectId,
+      'Agent Name': item.full_name,
+      'Team Leader': item.tl_name,
+      'Operations Manager': item.om_name,
       'Call Type': item.call_type,
       'Account Type': item.account_type,
       'Case ID/Service Request': item.case_id,
-      'Area/CTV Level 3': item.area_3,
-      'Sub-Area/CTV Level 4': item.sub_area_4,
+      'Area/CTV Level 3': item.area,
+      'Sub-Area/CTV Level 4': item.sub_area,
       'Transfer Call': item.transfer_call,
       'Transfer Destination': item.transfer_destination,
-      'Transfer approver ATTUID': item.transfer_approver_attuid,
+      'Transfer approver ATTUID': item.transfer_attuid,
       'Issue Resolved': item.issue_resolved,
-      'Is the customer happy with the resolution?': item.customer_happy,
+      'Is the customer happy with the resolution?': item.is_customer_happy,
       'Did you Provide Credit?': item.provide_credit,
-      'Agent Credit Amount': item.agent_credit_amount,
-      'Credit Approvers ATTUID': item.credit_approvers_attuid,
-      'Appointment inquiry "same day"': item.appointment_inquiry_same_day,
-      'Appointment inquiry "same day" - Selection': item.appointment_inquiry_same_day_selection,
-      'Focus Call Drivers': item.focus_call_drivers,
-      'Focus Call Drivers - Selection': item.focus_call_drivers_selection,
+      'Agent Credit Amount': item.credit_amount,
+      'Credit Approvers ATTUID': item.credit_attuid,
+      'Appointment inquiry "same day"': item.appointment_sameday,
+      'Appointment inquiry "same day" - Selection': item.appointment_sameday_2,
+      'Focus Call Drivers': item.focus_driver,
+      'Focus Call Drivers - Selection': item.focus_driver_2,
       'Repeat Prediction': item.repeat_prediction,
-      'PPLAN Closed': item.pplan_closed,
-      'PPLAN': item.pplan,
-      'Dispatch Call/Equipment Replacement': item.dispatch_equipment_replacement,
-      'Agent Due Date': item.agent_due_date,
-      'Agent Time': item.agent_time,
-      'Dispatch/Equipment Replacement Approver\'s ATTUID': item.dispatch_equipment_replacement_approver_attuid,
-      'WMT Process Opportunities': item.wmt_process_opportunities,
-      'Tool Issue (Genesys)': item.tool_issue_genesys,
-      'Support HRID': item.support_hrid,
-      'Reason for Account Review': item.reason_for_account_review,
-      'If CallBack': item.if_callback,
-      'Support - Appointment inquiry "same day"': item.support_appointment_inquiry_same_day,
-      'Support - Focus Call Drivers': item.support_focus_call_drivers,
-      'Dispatch Call/Equipment Replacement 2': item.dispatch_call_equipment_replacement,
-      'Validated?': item.validated,
-      'Due Date': item.due_date,
-      'Time': item.time,
-      'Sup Intervention Notes': item.sup_intervention_notes
+      'PPLAN Closed': item.pplan_close,
+      'PPLAN': item.pplan_close_2,
+      'Dispatch Call/Equipment Replacement': item.dispatch_call,
+      'Agent Due Date': item.due_date,
+      'Agent Time': item.select_time,
+      'Dispatch/Equipment Replacement Approver\'s ATTUID': item.dispatch_equipment,
+      'WMT Process Opportunities': "",
+      'Tool Issue (Genesys)': "",
+      'Support HRID': "",
+      'Reason for Account Review': "",
+      'If CallBack': "",
+      'Support - Appointment inquiry "same day"': "",
+      'Support - Focus Call Drivers': "",
+      'Dispatch Call/Equipment Replacement 2': "",
+      'Validated?': "",
+      'Due Date': "",
+      'Time': "",
+      'Sup Intervention Notes': ""
     }));
 
     // Convert the mapped data to a worksheet
     const ws = XLSX.utils.json_to_sheet(mappedData, { header: headers });
+
+    // Define column widths (you can adjust these values as needed)
+    const colWidths = headers.map((header, index) => {
+      let maxLength = 0;
+      mappedData.forEach((row: any) => {
+        const cellValue = row[header];
+        if (cellValue) {
+          maxLength = Math.max(maxLength, cellValue.toString().length);
+        }
+      });
+      return { wch: maxLength + 2 }; // Adding 2 for some extra space
+    });
+
+    // Adjust the width of the "Agent Name" column (e.g., set it to 30 characters)
+    const agentNameColumnIndex = headers.indexOf('Agent Name');
+    if (agentNameColumnIndex !== -1) {
+      colWidths[agentNameColumnIndex] = { wch: 30 }; // Adjust to 30 characters
+    }
+    const callidNameColumnIndex = headers.indexOf('Agent Name');
+    if (callidNameColumnIndex !== -1) {
+      colWidths[agentNameColumnIndex] = { wch: 30 }; // Adjust to 30 characters
+    }
+
+    // Apply column widths to the worksheet
+    ws['!cols'] = colWidths;
 
     // Create a new workbook and add the worksheet to it
     const wb = XLSX.utils.book_new();
@@ -89,6 +115,7 @@ export const fetchAndDownloadReport = async (startDate: Date | null, endDate: Da
     console.error('Error fetching data or generating report:', error);
   }
 };
+
 
 
 const authTokenString = sessionStorage.getItem("authToken");
