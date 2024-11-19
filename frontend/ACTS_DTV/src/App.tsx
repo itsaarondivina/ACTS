@@ -12,6 +12,7 @@ import ManageLookups from "./pages/ManageLookups"; // Import ManageLookups
 import LoginPage from "./pages/Login";
 import UserModule from "./pages/user";
 import Report from "./pages/Report";
+import Support from "./pages/Support";
 import Navbar from "./components/header";
 
 const App: React.FC = () => {
@@ -54,6 +55,15 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <Report />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/Support"
+          element={
+            <ProtectedRoute>
+              <Support />
             </ProtectedRoute>
           }
         />
