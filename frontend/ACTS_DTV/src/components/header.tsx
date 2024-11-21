@@ -79,8 +79,8 @@ const Navbar: React.FC = () => {
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
         >
-          <MenuItem onClick={handleMenuClose}>
-            <a href="/User" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <MenuItem component={Link} to="/Support" onClick={handleMenuClose}>
+            <a style={{ textDecoration: 'none', color: 'inherit' }}>
               Support
             </a>
           </MenuItem>

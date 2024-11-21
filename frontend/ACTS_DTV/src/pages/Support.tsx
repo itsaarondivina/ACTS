@@ -3,10 +3,8 @@ import {
   Box,
   Button,
   Typography,
-  TextField,
   Select,
   MenuItem,
-  InputLabel,
   FormControl,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -16,7 +14,6 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 const Support: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(new Date());
-  const [surveyRisk, setSurveyRisk] = useState("ALL");
   const [selectView, setSelectView] = useState("");
   const [searchView, setSearchView] = useState("");
 
@@ -30,7 +27,12 @@ const Support: React.FC = () => {
   }, []);
 
   const handleViewReport = () => {
-    console.log("View Report Clicked", { startDate, endDate, surveyRisk, selectView, searchView });
+    console.log("View Report Clicked", {
+      startDate,
+      endDate,
+      selectView,
+      searchView,
+    });
   };
 
   return (
@@ -52,115 +54,126 @@ const Support: React.FC = () => {
       {/* Dashboard View */}
       <Box
         sx={{
-          backgroundColor: "#FFA500",
-          padding: 3,
-          margin: 2,
-          borderRadius: 2,
+          backgroundColor: "white",
+          padding: "2rem",
+          margin: "2%",
+          borderRadius: "1rem",
+          border: "0.1rem solid orange",
+          boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+          width: "90%", // Relative width
+          maxWidth: "1200px", // Optional: Limit maximum width
+          marginInline: "auto", // Center on the page
         }}
       >
-        <Typography variant="h6" gutterBottom sx={{ color: "white" }}>
-          Dashboard View
-        </Typography>
-        <Box display="flex" gap={2} flexWrap="wrap">
+        <Box
+          sx={{
+            backgroundColor: "orange",
+            padding: "1rem",
+            borderRadius: "1rem",
+          }}
+        >
+          <Typography variant="h6" gutterBottom sx={{ color: "white" }}>
+            Dashboard View
+          </Typography>
+        </Box>
+        <Box
+          display="flex"
+          flexWrap="wrap"
+          alignItems="center"
+          gap="1rem"
+          sx={{ background: "white", padding: "1rem" }}
+        >
           {/* Start Date */}
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box>
-              <Typography variant="subtitle1" color="white">
+              <Typography variant="subtitle1" color="black">
                 Start Date
               </Typography>
               <DatePicker
                 value={startDate}
                 onChange={(newDate) => setStartDate(newDate)}
                 sx={{
-                  background: "White",
-                  borderRadius: 1,
-                  padding: "5px",
+                  background: "white",
+                  borderRadius: "0.5rem",
+                  padding: "0.5rem",
+                  width: "100%", // Make it responsive
                 }}
               />
             </Box>
+
             {/* End Date */}
             <Box>
-              <Typography variant="subtitle1" color="white">
+              <Typography variant="subtitle1" color="black">
                 End Date
               </Typography>
               <DatePicker
                 value={endDate}
                 onChange={(newDate) => setEndDate(newDate)}
                 sx={{
-                  background: "White",
-                  borderRadius: 1,
-                  padding: "5px",
+                  background: "white",
+                  borderRadius: "0.5rem",
+                  padding: "0.5rem",
+                  width: "100%", // Make it responsive
                 }}
               />
             </Box>
           </LocalizationProvider>
 
-          {/* Survey Risk */}
-          <FormControl>
-            <InputLabel id="survey-risk-label" sx={{ color: "white" }}>
-              Survey Risk
-            </InputLabel>
-            <Select
-              value={surveyRisk}
-              onChange={(e) => setSurveyRisk(e.target.value)}
-              sx={{
-                minWidth: 120,
-                background: "white",
-                borderRadius: 1,
-              }}
-            >
-              <MenuItem value="ALL">ALL</MenuItem>
-              <MenuItem value="High">High</MenuItem>
-              <MenuItem value="Medium">Medium</MenuItem>
-              <MenuItem value="Low">Low</MenuItem>
-            </Select>
-          </FormControl>
-
           {/* Select View */}
-          <FormControl>
-            <InputLabel id="select-view-label" sx={{ color: "white" }}>
-              Select View
-            </InputLabel>
-            <Select
-              value={selectView}
-              onChange={(e) => setSelectView(e.target.value)}
-              sx={{
-                minWidth: 120,
-                background: "white",
-                borderRadius: 1,
-              }}
-            >
-              <MenuItem value="Summary">Summary</MenuItem>
-              <MenuItem value="Detailed">Detailed</MenuItem>
-            </Select>
-          </FormControl>
+          <Box>
+            <FormControl sx={{ width: "10rem" }}>
+              <Typography variant="subtitle1" color="black">
+                Survey Risk
+              </Typography>
+              <Select
+                value={selectView}
+                onChange={(e) => setSelectView(e.target.value)}
+                sx={{
+                  background: "white",
+                  borderRadius: "0.5rem",
+                }}
+              >
+                <MenuItem value="ALL">ALL</MenuItem>
+                <MenuItem value="LOW">LOW</MenuItem>
+                <MenuItem value="HIGH">HIGH</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
 
           {/* Search View */}
           <Box>
-            <Typography variant="subtitle1" color="white">
-              Search View
-            </Typography>
-            <TextField
-              value={searchView}
-              onChange={(e) => setSearchView(e.target.value)}
-              size="small"
-              sx={{
-                background: "White",
-                borderRadius: 1,
-                padding: "5px",
-              }}
-            />
+            <FormControl sx={{ width: "13rem" }}>
+              <Typography variant="subtitle1" color="black">
+                Select View
+              </Typography>
+              <Select
+                value={searchView}
+                onChange={(e) => setSearchView(e.target.value)}
+                sx={{
+                  background: "white",
+                  borderRadius: "0.5rem",
+                  minWidth: "10rem",
+                }}
+              >
+                <MenuItem value="OM VIEW">OM VIEW</MenuItem>
+                <MenuItem value="TEAM LEADER VIEW">TEAM LEADER VIEW</MenuItem>
+                <MenuItem value="CAR DRIVER VIEW">CAR DRIVER VIEW</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={handleViewReport}
+            sx={{
+              mt: "1rem",
+              ml: "1rem",
+              width: "10rem",
+            }}
+          >
+            View
+          </Button>
         </Box>
-
-        <Button
-          variant="contained"
-          color="success"
-          onClick={handleViewReport}
-          sx={{ mt: 2 }}
-        >
-          View
-        </Button>
       </Box>
 
       {/* Support Form */}
@@ -200,9 +213,7 @@ const Support: React.FC = () => {
               <th style={{ border: "1px solid #000", padding: "8px" }}>
                 ACCOUNT TYPE
               </th>
-              <th style={{ border: "1px solid #000", padding: "8px" }}>
-                DATE
-              </th>
+              <th style={{ border: "1px solid #000", padding: "8px" }}>DATE</th>
               <th style={{ border: "1px solid #000", padding: "8px" }}>
                 ACTION
               </th>
