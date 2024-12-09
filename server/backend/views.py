@@ -1,3 +1,6 @@
+import json
+from multiprocessing import connection
+from django.http import JsonResponse
 from rest_framework import generics
 from .models import Team_Access, User_Admin,Category, DropDownLookup,AgentCts
 from .serializers import TeamAccessSerializer, UserAdminSerializer,CategorySerializer, DropdownLookupSerializer, AgentctsSerializer
@@ -85,3 +88,55 @@ class AgentCtsListCreateView(generics.ListCreateAPIView):
         # Return the filtered or unfiltered queryset
         return queryset
 
+
+
+# backend/views.py
+# @require_http_methods(["GET", "POST"])
+def view_report(request):
+    try:
+        if request.method == "POST":
+            # Parse incoming JSON data
+            data = json.loads(request.body)
+            start_date = data.get("startDate")
+            end_date = data.get("endDate")
+            select_view = data.get("selectView")
+            search_view = data.get("searchView")
+        elif request.method == "GET":
+            # Parse parameters from query string
+            start_date = request.GET.get("startDate")
+            end_date = request.GET.get("endDate")
+            select_view = request.GET.get("selectView")
+            search_view = request.GET.get("searchView")
+        else:
+            return JsonResponse({"error": "Unsupported method"}, status=405)
+
+        # Execute the function
+        with connection.cursor() as cursor:
+            query = """
+            SELECT * FROM get_report(%s, %s, %s, %s);
+            """
+            cursor.execute(query, [start_date, end_date, select_view, search_view])
+            result = cursor.fetchall()
+
+            # Get column names for the result
+            columns = [col[0] for col in cursor.description]
+
+        # Transform result into a list of dictionaries
+        result_data = [dict(zip(columns, row)) for row in result]
+
+        return JsonResponse({
+            "result": result_data
+        })
+
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=400)
+    
+
+def get_agentcts_data(request):
+    if request.method == 'POST':  # Ensure only POST requests are accepted
+        # Your logic to fetch data goes here
+        data = AgentCts.objects.all()  # Adjust this as per your needs
+        result = list(data.values())  # Convert queryset to list of dicts
+        return JsonResponse({"result": result})
+    else:
+        return JsonResponse({"error": "Method not allowed"}, status=405)

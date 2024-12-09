@@ -24,4 +24,6 @@ urlpatterns = [
     path('category/', include('backend.category_urls')),  # Include the app's URL configuration
     path('dropdownlookup/', include('backend.dropdown_lookup_urls')),  # Include the app's URL configuration
     path('agentcts/', include('backend.agentCts_urls')),  # Include the app's URL configuration
+    path('view-report/', include('backend.view_report_urls')),  # Update here to make the path cleaner
+    path('get-agents/', include('backend.get_agents_urls')),  # Update here to make the path cleaner
 ]

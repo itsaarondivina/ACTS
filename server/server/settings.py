@@ -130,5 +130,10 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CORS_ALLOW_ALL_ORIGINS = True  # Add this line to allow all origins
-
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Your frontend
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",  # Your frontend URL
+]
+CSRF_COOKIE_DOMAIN = ".localhost"  # Allow CSRF cookie for all subdomains of localhost
