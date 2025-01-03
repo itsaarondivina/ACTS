@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import React, { useEffect, useState } from "react";
 import {
@@ -11,7 +12,7 @@ import {
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import axios from "axios";
+import { fetchagentcts } from "../utils/api";
 
 const Support: React.FC = () => {
   const [startDate, setStartDate] = useState<Date | null>(new Date());
@@ -19,7 +20,7 @@ const Support: React.FC = () => {
   const [selectView, setSelectView] = useState("");
   const [searchView, setSearchView] = useState("");
 
-  const [agentcts, setAgentcts] = useState([]);
+  const [agentcts, setAgentcts] = useState<any[]>([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -31,91 +32,25 @@ const Support: React.FC = () => {
     };
   }, []);
 
-
   const fetchAgentctsData = async () => {
     try {
-        const response = await axios.get("http://127.0.0.1:8000/api/agentcts/");
-        setAgentcts(response.data.data);
-        setError("");
-        console.log(agentcts)
-        console.log(error)
-    } catch (err) {
-        setError("Failed to fetch data");
-        console.error(err);
+      
+  
+      const lookupItemsData = await fetchagentcts(startDate,endDate);
+      console.log(lookupItemsData);
+      setAgentcts(lookupItemsData);
+      setError(""); //  Clear previous errors if successful
+    } catch (error) {
+      console.error("Error fetching lookup items:", error);
+      setError("Failed to fetch data. Please try again.");
     }
-};
-
-  // const fetchAgentctsData = async () => {
-  //   const csrfToken = getCSRFToken(); // Retrieve CSRF token from the cookie
+  };
   
-  //   try {
-  //     const response = await axios.post(
-  //       'http://127.0.0.1:8000/get-agents/', 
-  //       {},  // Include any required body here
-  //       {
-  //         headers: {
-  //           'X-CSRFToken': csrfToken,  // Include the CSRF token in the header
-  //         }
-  //       }
-  //     );
-  
-  //     console.log('Agent CTS Data:', response.data.result);  // Logs the fetched data
-  //   } catch (error) {
-  //     console.error('Error fetching agentcts data:', error);
-  //   }
-  // };
-  // Function to get CSRF token from cookies
-// const getCSRFToken = () => {
-//   const cookies = document.cookie.split(';');
-//   for (let cookie of cookies) {
-//     const [name, value] = cookie.trim().split('=');
-//     if (name === 'csrftoken') {
-//       return value;
-//     }
-//   }
-//   return null;
-// };
 
-// const handleViewReport = async () => {
-//   // Format the dates before sending them
-//   const formattedStartDate = startDate ? startDate.toISOString().split('T')[0] : '';
-//   const formattedEndDate = endDate ? endDate.toISOString().split('T')[0] : '';
-
-//   console.log("View Report Clicked", {
-//     startDate: formattedStartDate,
-//     endDate: formattedEndDate,
-//     selectView,
-//     searchView,
-//   });
-
-//   try {
-//     // Get the CSRF token from the cookies
-//     const csrfToken = getCSRFToken();
-
-//     // Make the POST request with the CSRF token in the headers
-//     const response = await axios.post(
-//       'http://127.0.0.1:8000/view-report/', 
-//       {
-//         startDate: formattedStartDate,
-//         endDate: formattedEndDate,
-//         selectView,
-//         searchView,
-//       },
-//       {
-//         headers: {
-//           'X-CSRFToken': csrfToken,  // Include CSRF token in the headers
-//         },
-//       }
-//     );
-
-//     console.log("Report Data:", response.data);
-//   } catch (error) {
-//     console.error("Error fetching report data:", error);
-//   }
-// };
-
-  
-  
+  // useEffect(() => {
+  //   // Fetch data on component mount
+  //   fetchAgentctsData();
+  // }, []);
 
   return (
     <Box>
@@ -142,9 +77,9 @@ const Support: React.FC = () => {
           borderRadius: "1rem",
           border: "0.1rem solid orange",
           boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
-          width: "90%", // Relative width
-          maxWidth: "1200px", // Optional: Limit maximum width
-          marginInline: "auto", // Center on the page
+          width: "90%",
+          maxWidth: "1200px",
+          marginInline: "auto",
         }}
       >
         <Box
@@ -178,7 +113,7 @@ const Support: React.FC = () => {
                   background: "white",
                   borderRadius: "0.5rem",
                   padding: "0.5rem",
-                  width: "100%", // Make it responsive
+                  width: "100%",
                 }}
               />
             </Box>
@@ -195,7 +130,7 @@ const Support: React.FC = () => {
                   background: "white",
                   borderRadius: "0.5rem",
                   padding: "0.5rem",
-                  width: "100%", // Make it responsive
+                  width: "100%",
                 }}
               />
             </Box>
@@ -272,6 +207,12 @@ const Support: React.FC = () => {
           Support Form: DAVAO DTV TECH
         </Typography>
 
+        {error && (
+          <Typography color="error" sx={{ marginTop: 2 }}>
+            {error}
+          </Typography>
+        )}
+
         {/* Table */}
         <Box
           component="table"
@@ -302,18 +243,45 @@ const Support: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td
-                colSpan={6}
-                style={{
-                  border: "1px solid #000",
-                  textAlign: "center",
-                  padding: "8px",
-                }}
-              >
-                No data available in table
-              </td>
-            </tr>
+            {agentcts.length > 0 ? (
+              agentcts.map((agent, index) => (
+                <tr key={index}>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    {agent.callId}
+                  </td>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    {agent.agentName}
+                  </td>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    {agent.callType}
+                  </td>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    {agent.accountType}
+                  </td>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    {agent.date}
+                  </td>
+                  <td style={{ border: "1px solid #000", padding: "8px" }}>
+                    <Button variant="contained" color="primary" size="small">
+                      Action
+                    </Button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan={6}
+                  style={{
+                    border: "1px solid #000",
+                    textAlign: "center",
+                    padding: "8px",
+                  }}
+                >
+                  No data available in table
+                </td>
+              </tr>
+            )}
           </tbody>
         </Box>
       </Box>

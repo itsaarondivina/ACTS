@@ -395,6 +395,28 @@ export const fetchLookup = async () => {
   }
 };
 
+export const fetchagentcts = async (
+  startDate: Date | null,
+  endDate: Date | null
+) => {
+  try {
+    console.log("Api : ", startDate , endDate)
+    const formattedStartDate = startDate ? startDate.toISOString() : "";
+    const formattedEndDate = endDate ? endDate.toISOString() : "";
+    const response = await axios.get("http://127.0.0.1:8000/agentcts/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
+    return response.data; // Assuming the response contains the categories
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+
 export const fetchUserAdmindata = async () => {
   try {
     const response = await axios.get("http://127.0.0.1:8000/user_admin/");

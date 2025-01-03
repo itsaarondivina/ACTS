@@ -1,3 +1,4 @@
+import datetime
 import json
 from multiprocessing import connection
 from django.http import JsonResponse
@@ -61,32 +62,51 @@ class DropdownlookupDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = DropdownLookupSerializer
     lookup_field = 'pk'
 
-
 class AgentCtsListCreateView(generics.ListCreateAPIView):
-    queryset = AgentCts.objects.all()
     serializer_class = AgentctsSerializer
 
     def get_queryset(self):
-        # Get the base queryset
-        queryset = super().get_queryset()
+        queryset = AgentCts.objects.all()
 
         # Get query parameters
-        start_date = self.request.query_params.get('start_date', None)
-        end_date = self.request.query_params.get('end_date', None)
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
 
-        # Apply filtering if dates are provided
+        # Filter by start_date
         if start_date:
-            start_date = parse_datetime(start_date)
-            if start_date:
-                queryset = queryset.filter(date_created__gte=start_date)
+            queryset = queryset.filter(date_created__gte=start_date)
         
+        # Filter by end_date
         if end_date:
-            end_date = parse_datetime(end_date)
-            if end_date:
-                queryset = queryset.filter(date_created__lte=end_date)
+            queryset = queryset.filter(date_created__lte=end_date)
 
-        # Return the filtered or unfiltered queryset
         return queryset
+
+# class AgentCtsListCreateView(generics.ListCreateAPIView):
+#     queryset = AgentCts.objects.all()
+#     serializer_class = AgentctsSerializer
+
+#     def get_queryset(self):
+#         # Get the base queryset
+#         queryset = super().get_queryset()
+
+#         # Get query parameters
+#         start_date = self.request.query_params.get('start_date', None)
+#         end_date = self.request.query_params.get('end_date', None)
+
+#         # Apply filtering if dates are provided
+#         if start_date:
+#             start_date = parse_datetime(start_date)
+#             if start_date:
+#                 queryset = queryset.filter(date_created__gte=start_date)
+        
+#         if end_date:
+#             end_date = parse_datetime(end_date)
+#             if end_date:
+#                 queryset = queryset.filter(date_created__lte=end_date)
+
+#         # Return the filtered or unfiltered queryset
+#         return queryset
 
 
 
