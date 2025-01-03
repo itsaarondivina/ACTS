@@ -81,6 +81,27 @@ class AgentCtsListCreateView(generics.ListCreateAPIView):
             queryset = queryset.filter(date_created__lte=end_date)
 
         return queryset
+    
+
+class AgentCtsDashboard(generics.ListCreateAPIView):
+    serializer_class = AgentctsSerializer
+
+    def get_queryset(self):
+        queryset = AgentCts.objects.all()
+
+        # Get query parameters
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+
+        # Filter by start_date
+        if start_date:
+            queryset = queryset.filter(date_created__gte=start_date)
+        
+        # Filter by end_date
+        if end_date:
+            queryset = queryset.filter(date_created__lte=end_date)
+
+        return queryset
 
 # class AgentCtsListCreateView(generics.ListCreateAPIView):
 #     queryset = AgentCts.objects.all()

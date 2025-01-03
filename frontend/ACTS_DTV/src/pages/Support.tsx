@@ -37,7 +37,7 @@ const Support: React.FC = () => {
       
   
       const lookupItemsData = await fetchagentcts(startDate,endDate);
-      console.log(lookupItemsData);
+      console.log("Dashboard view: ",lookupItemsData);
       setAgentcts(lookupItemsData);
       setError(""); //  Clear previous errors if successful
     } catch (error) {

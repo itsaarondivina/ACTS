@@ -403,7 +403,7 @@ export const fetchagentcts = async (
     console.log("Api : ", startDate , endDate)
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get("http://127.0.0.1:8000/agentcts/", {
+    const response = await axios.get("http://127.0.0.1:8000/agentcts/dashboard/", {
       params: {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
