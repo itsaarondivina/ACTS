@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include,re_path
+from django.views.generic.base import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,7 +24,9 @@ urlpatterns = [
     path('user_admin/', include('backend.user_admin_urls')),  # Include the app's URL configuration
     path('category/', include('backend.category_urls')),  # Include the app's URL configuration
     path('dropdownlookup/', include('backend.dropdown_lookup_urls')),  # Include the app's URL configuration
-    path('agentcts/', include('backend.agentCts_urls')),  # Include the app's URL configuration
+    path('agentcts/', include('backend.agentCts_urls')), 
     path('view-report/', include('backend.view_report_urls')),  # Update here to make the path cleaner
     path('get-agents/', include('backend.get_agents_urls')),  # Update here to make the path cleaner
+    re_path(r'^.*$', TemplateView.as_view(template_name="index.html"), name="index"),
+
 ]

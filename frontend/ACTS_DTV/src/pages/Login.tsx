@@ -14,7 +14,6 @@ import { getEmployeeDetails, EmployeeDetails } from '../utils/authentication';
 const LoginPage: React.FC = () => {
   const [hrid, setHrid] = useState('');
   const [hireDate, setHireDate] = useState('');
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [employeeDetails, setEmployeeDetails] = useState<EmployeeDetails | null>(null);
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -33,7 +32,7 @@ const LoginPage: React.FC = () => {
       setError('Both HRID and Hire Date are required.');
       return;
     }
-
+    console.log(employeeDetails)
     setLoading(true);
     setError('');
 
@@ -107,6 +106,7 @@ const LoginPage: React.FC = () => {
         inputProps={{ maxLength: 10 }} // Adjust for expected date format
         error={!hireDate && Boolean(error)}
         disabled = {loading}
+        type='password'
       />
       <Button
         variant="contained"

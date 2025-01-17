@@ -107,6 +107,19 @@ class AgentCts (models.Model):
     om_hrid = models.CharField(max_length=150, null=True)
     projectId = models.CharField(max_length=150, null=True)
 
+    support_reason_for_account_review = models.CharField(max_length=250, null=True)  # Reason for Account Review
+    support_callback_type = models.CharField(max_length=250, null=True)  # If Callback
+    support_resolved = models.CharField(max_length=250, null=True)  # Resolved
+    support_transfer = models.CharField(max_length=250, null=True)  # Transfer
+    support_validated = models.CharField(max_length=250, null=True)  # Validated
+    support_dispatch_call_equipment = models.CharField(max_length=250, null=True)  # Dispatch Call/Equipment Replacement
+    support_due_date = models.CharField(max_length=250, null=True)  # Due Date
+    support_time = models.CharField(max_length=250, null=True)  # Time
+    support_notes = models.TextField(null=True)  # Support Intervention Notes
+    support_created_by = models.CharField(max_length=150, null=True)  # Support Created By
+    support_updated_by = models.CharField(max_length=150, null=True)  # Support Updated By
+
+
 
     def __str__(self):
         return self.case_id

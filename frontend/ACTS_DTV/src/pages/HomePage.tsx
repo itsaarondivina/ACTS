@@ -862,6 +862,7 @@ const AgentForm: React.FC = () => {
                   value={caseId}
                   onChange={(e) => setCaseId(e.target.value)}
                   inputProps={{ maxLength: 16 }}
+                  type="password"
                 />
                 <FormHelperText>Max length is 16 characters</FormHelperText>
               </FormControl>

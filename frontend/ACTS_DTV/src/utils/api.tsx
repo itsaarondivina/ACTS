@@ -129,25 +129,25 @@ export const fetchAndDownloadReport = async (
       "Agent Time": item.select_time,
       "Dispatch/Equipment Replacement Approver's ATTUID":
         item.dispatch_equipment,
-      "WMT Process Opportunities": "",
-      "Tool Issue (Genesys)": "",
-      "Support HRID": "",
-      "Reason for Account Review": "",
-      "If CallBack": "",
-      'Support - Appointment inquiry "same day"': "",
-      "Support - Focus Call Drivers": "",
-      "Dispatch Call/Equipment Replacement 2": "",
-      "Validated?": "",
-      "Due Date": "",
-      Time: "",
-      "Sup Intervention Notes": "",
+      "WMT Process Opportunities": item.wmt,
+      "Tool Issue (Genesys)": item.tool_issue,
+      "Support HRID": item.support_created_by,
+      "Reason for Account Review": item.support_reason_for_account_review,
+      "If CallBack": item.support_callback_type,
+      'Support - Appointment inquiry "same day"': item.appointment_sameday,
+      "Support - Focus Call Drivers": item.focus_driver,
+      "Dispatch Call/Equipment Replacement 2": item.dispatch_equipment,
+      "Validated?": item.support_validated,
+      "Due Date": item.support_due_date,
+      Time: item.support_time,
+      "Sup Intervention Notes": item.support_notes,
     }));
 
     // Convert the mapped data to a worksheet
     const ws = XLSX.utils.json_to_sheet(mappedData, { header: headers });
 
     // Define column widths
-    const colWidths = headers.map((header, index) => {
+    const colWidths = headers.map((header) => {
       let maxLength = 0;
       mappedData.forEach((row: any) => {
         const cellValue = row[header];
@@ -374,6 +374,59 @@ export const saveAgentCtsItem = async (agentCtsItem: {
     throw error;
   }
 };
+interface AgentSupportItem {
+  agent_id?: number;
+  support_reason_for_account_review?: string | null;
+  support_callback_type?: string | null;
+  support_resolved?: string | null;
+  support_transfer?: string | null;
+  support_validated?: string | null;
+  support_dispatch_call_equipment?: string | null;
+  support_due_date?: string | null;
+  support_time?: string | null;
+  support_notes?: string | null;
+  support_created_by?: string | null;
+  support_updated_by?: string | null;
+  id?: any;
+}
+
+export const saveSupport = async (agentSupportItem: AgentSupportItem) => {
+  try {
+    // Log the data being sent for debugging
+    console.log("api DATA", agentSupportItem);
+
+    // Ensure the agent_id is present (required for updating the correct record)
+    if (!agentSupportItem.agent_id) {
+      throw new Error("Agent ID is required to update the support record.");
+    }
+
+    // Make a PATCH request to update the AgentCts object
+    const response = await axios.patch(
+      `http://127.0.0.1:8000/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`,  // Use the agent ID to target the specific agent
+      {
+        support_reason_for_account_review: agentSupportItem.support_reason_for_account_review || null,
+        support_callback_type: agentSupportItem.support_callback_type || null,
+        support_resolved: agentSupportItem.support_resolved || null,
+        support_transfer: agentSupportItem.support_transfer || null,
+        support_validated: agentSupportItem.support_validated || null,
+        support_dispatch_call_equipment: agentSupportItem.support_dispatch_call_equipment || null,
+        support_due_date: agentSupportItem.support_due_date || null,
+        support_time: agentSupportItem.support_time || null,
+        support_notes: agentSupportItem.support_notes || null,
+        support_created_by: hridsession || null,
+        support_updated_by: hridsession || null,
+      }
+    );
+
+    // Return the response data if the update is successful
+    return response.data;
+
+  } catch (error) {
+    console.error("Error saving Agent Support item:", error);
+    throw error;
+  }
+};
+
 
 export const fetchCategories = async () => {
   try {
@@ -384,6 +437,19 @@ export const fetchCategories = async () => {
     throw error;
   }
 };
+
+export const getSelectedAgent = async (id: any) => {
+  try {
+    // Fetch the agent details by passing the agent's ID into the URL
+    const response = await axios.get(`http://127.0.0.1:8000/agentcts/id/${id}/`);
+    console.log('from api', response.data)
+    return response.data; // Assuming the response contains the agent's details
+  } catch (error) {
+    console.error("Error fetching agent:", error);
+    throw error;
+  }
+};
+
 
 export const fetchLookup = async () => {
   try {
@@ -404,6 +470,48 @@ export const fetchagentcts = async (
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
     const response = await axios.get("http://127.0.0.1:8000/agentcts/dashboard/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
+    return response.data; // Assuming the response contains the categories
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+export const fetchOMview = async (
+  startDate: Date | null,
+  endDate: Date | null
+) => {
+  try {
+    console.log("Api : ", startDate , endDate)
+    const formattedStartDate = startDate ? startDate.toISOString() : "";
+    const formattedEndDate = endDate ? endDate.toISOString() : "";
+    const response = await axios.get("http://127.0.0.1:8000/agentcts/om-view-dashboard/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
+    return response.data; // Assuming the response contains the categories
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    throw error;
+  }
+};
+
+export const fetchCDview = async (
+  startDate: Date | null,
+  endDate: Date | null
+) => {
+  try {
+    console.log("Api : ", startDate , endDate)
+    const formattedStartDate = startDate ? startDate.toISOString() : "";
+    const formattedEndDate = endDate ? endDate.toISOString() : "";
+    const response = await axios.get("http://127.0.0.1:8000/agentcts/cd-view-dashboard/", {
       params: {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
