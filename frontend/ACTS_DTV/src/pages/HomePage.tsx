@@ -21,7 +21,6 @@ import {
 import SaveIcon from "@mui/icons-material/Save";
 import ClearIcon from "@mui/icons-material/Clear";
 import { fetchLookup, saveAgentCtsItem } from "../utils/api";
-import { getTLOMdetails } from "../utils/authentication";
 import ScrollToTopButton from "../utils/scrolltoTop";
 
 interface LookupItem {
@@ -82,14 +81,17 @@ const AgentForm: React.FC = () => {
     fetchData();
   }, []);
 
-  const authTokenString = sessionStorage.getItem("authToken");
+  const authTokenString = sessionStorage.getItem("user");
   const authToken = authTokenString ? JSON.parse(authTokenString) : null;
   // const profilePic = authToken?.profilepicture || "/path/to/default-image.png";
-  const fullName = authToken?.name || "User";
-  const id = authToken?.id || "User";
-  const tl_id = authToken?.tl_Id || "User";
-  const Country = authToken?.country || "User";
-  const projId = authToken?.projectId || "User";
+  const fullName = authToken?.FirstName + authToken?.Lastname || "User";
+  const id = authToken?.HRID || "User";
+  const tl_id = authToken?.tldetails.tl_id || "User";
+  const tl_name = authToken?.tldetails.tl_name || "User";
+  const om_name = authToken?.tldetails.om_name || "User";
+  const om_id = authToken?.tldetails.om_id || "User";
+  const Country = authToken?.tldetails.country_code || "User";
+  const projId = authToken?.tldetails.department || "User";
   // Filter choices with category_id 1 for the Call Type options
   const callTypeOptions = lookup.filter(
     (item) => item.category_id === 1 && item.is_active === true
@@ -611,11 +613,11 @@ const AgentForm: React.FC = () => {
     setSnackbarOpen(false); // Close Snackbar before new action
     setSnackbarMessage(""); // Clear previous message
 
-    const tlDetails = await getTLOMdetails(tl_id);
-    console.log("TL Details: main page", tlDetails);
+    // const tlDetails = await getTLOMdetails(tl_id);
+    // console.log("TL Details: main page", tlDetails);
 
-    const omDetails = await getTLOMdetails(tlDetails?.supervisor || "");
-    console.log("OM Details: main page", omDetails);
+    // const omDetails = await getTLOMdetails(tlDetails?.supervisor || "");
+    // console.log("OM Details: main page", omDetails);
 
     const AgentCts = {
       call_type: selectedCallType || null,
@@ -652,9 +654,9 @@ const AgentForm: React.FC = () => {
       full_name: fullName || null,
       region: Country || null,
       tl_hrid: tl_id || null,
-      tl_name: tlDetails?.name || null,
-      om_name: omDetails?.name || null,
-      om_hrid: omDetails?.id || null,
+      tl_name: tl_name || null,
+      om_name: om_name|| null,
+      om_hrid: om_id || null,
       projectId: projId || null,
     };
 

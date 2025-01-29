@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-ohru(lq9z-y&_@@st$=on86$(b$5ada^youtg_3k88j5!rej37
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = ['vxi-itech-acts-dtvtech-127333559366.us-central1.run.app',
+#                  '127.0.0.1']
+ALLOWED_HOSTS = ["*"]
+
 
 
 # Application definition
@@ -92,6 +95,17 @@ DATABASES = {
         'PORT':'5432',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': os.environ.get("DB_NAME"),
+#         'USER': os.environ.get("DB_USER"),
+#         'PASSWORD': os.environ.get("DB_PASS"),
+#         'PORT': os.environ.get("DB_PORT"),
+#         'HOST': os.environ.get("DB_HOST"),
+#     }
+# }
 
 
 # Password validation

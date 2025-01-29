@@ -18,6 +18,93 @@ from django.db.models import Count, Q, Case, When, Value, IntegerField, DecimalF
 import requests
 from django.http import JsonResponse
 
+def exchange_token(request):
+    print("Hello")
+    code = request.GET.get('code')
+    code_verifier = request.GET.get('codeVerifier') 
+    print("Request:", code_verifier)
+    print("code:", code)
+    if not code or not code_verifier:
+        return JsonResponse({'error': 'Authorization code and code_verifier are required'}, status=400)
+
+    payload = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': 'http://localhost:5173/authorization-code/callback',
+        # 'redirect_uri': 'http://127.0.0.1:8000/authorization-code/callback',
+        # 'redirect_uri': 'https://vxi-itech-modivcare-escalation-127333559366.us-central1.run.app/authorization-code/callback', 
+        # 'client_id': '0oamtgi9kffnJDVFD5d7', <- Local
+        # 'client_id': '0oamtlx0l8bCM4lrm5d7',
+        'client_id': '0oamuia55wqxjHKVC5d7',
+        'client_secret': '9DaON-kTYvPcS5Ppt-HVfPznC99P3hZ36_hWw0C0fdAaHFhfFDd_IVkfh-rrY51q', #local
+        # 'client_secret': 'e9AuvxtcLA5NnhZEtqrFn2EVX3SSTTM3zKrym9k3Q4Gk-OQlTJThwi_7EIywgxxf',
+        # 'client_secret': 'nih1z1ws18xgpn6fMl4PKj8Ze4gs_ZCtjEqxu7-LcXpID7bjrhV3n4ewiMV-AIKu',
+        'code_verifier': code_verifier,  # Include the code_verifier here
+    }
+    okta_issuer = "https://dev-97322452.okta.com"
+
+    try:
+        # Send the POST request to Okta
+        response = requests.post(f'{okta_issuer}/oauth2/v1/token', data=payload)
+
+        # Handle the response
+        if response.status_code == 200:
+            access_token = response.json().get('access_token')
+            print("Access token received:", access_token)
+            
+            # Now use the access token to fetch user info
+            user_info_response = requests.get(
+                f'{okta_issuer}/oauth2/v1/userinfo',
+                headers={'Authorization': f'Bearer {access_token}'}
+            )
+            
+            if user_info_response.status_code == 200:     
+                user_data = user_info_response.json()  
+                hrid = user_data.get('HRID')
+
+                user = User_Admin.objects.filter(HRID=hrid).first()
+                if user:
+                    userinfo = {
+                        'HRID': user_data.get('HRID'),
+                        'email': user_data.get('email'),
+                        'FirstName': user_data.get('given_name'),
+                        'Lastname': user_data.get('family_name'),
+                        'Site': user_data.get('site'),
+                        'Team': user_data.get('Team'),
+                        'Position': user_data.get('position'),
+                        'Role': user.Role if user and user.Role else "USER",
+                        'profilepicture': f'https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id={hrid}',
+                        'name': user_data.get('given_name') + ' ' + user_data.get('family_name'),
+                    }
+                else:
+                    userinfo = {
+
+                        'HRID': user_data.get('HRID'),
+                        'email': user_data.get('email'),
+                        'FirstName': user_data.get('given_name'),
+                        'Lastname': user_data.get('family_name'),
+                        'Site': user_data.get('site'),
+                        'Team': user_data.get('Team'),
+                        'Position': user_data.get('position'),
+                        'profilepicture': f'https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id={hrid}',
+                        'Role': user.Role if user and user.Role else "USER",
+
+                    }
+                
+                print("HRID:", userinfo)  
+
+                return JsonResponse(userinfo)  # Return the user data
+            else:
+                print(f"Error fetching user info: {user_info_response.text}")
+                return JsonResponse(user_info_response.json(), status=user_info_response.status_code)  # Return the error response
+        else:
+            print(f"Error response from token exchange: {response.text}")  # Log the error response
+            return JsonResponse(response.json(), status=response.status_code)  # Return the error response
+    except requests.RequestException as e:
+        # Handle any exception during the request process
+        print(f"Request failed: {e}")
+        return JsonResponse({'error': 'Failed to exchange token. Please try again later.'}, status=500)
+
 
 class EmployeeDataView(generics.ListCreateAPIView):
     def get(self, request):
