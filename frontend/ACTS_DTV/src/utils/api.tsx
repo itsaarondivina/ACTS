@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
+import API from "../api"; // Import your custom API instance
 
 import * as XLSX from "xlsx";
 
@@ -11,8 +12,9 @@ export const fetchAndDownloadReport = async (
   try {
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    console.log(formattedEndDate, formattedStartDate)
-    const response = await axios.get("http://127.0.0.1:8000/agentcts/", {
+    console.log(formattedEndDate, formattedStartDate);
+    // const response = await axios.get("http://127.0.0.1:8000/agentcts/", {
+    const response = await API.get("/agentcts/", {
       params: {
         start_date: formattedStartDate,
         end_date: formattedEndDate,
@@ -364,10 +366,11 @@ export const saveAgentCtsItem = async (agentCtsItem: {
   projectId: string | null;
 }) => {
   try {
-    const response = await axios.post(
-      "http://127.0.0.1:8000/agentcts/",
-      agentCtsItem
-    );
+    // const response = await axios.post(
+    //   "http://127.0.0.1:8000/agentcts/",
+    //   agentCtsItem
+    // );
+    const response = await API.post("/agentcts/", agentCtsItem);
     return response.data;
   } catch (error) {
     console.error("Error saving Agent CTS item:", error);
@@ -402,14 +405,16 @@ export const saveSupport = async (agentSupportItem: AgentSupportItem) => {
 
     // Make a PATCH request to update the AgentCts object
     const response = await axios.patch(
-      `http://127.0.0.1:8000/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`,  // Use the agent ID to target the specific agent
+      `http://127.0.0.1:8000/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`, // Use the agent ID to target the specific agent
       {
-        support_reason_for_account_review: agentSupportItem.support_reason_for_account_review || null,
+        support_reason_for_account_review:
+          agentSupportItem.support_reason_for_account_review || null,
         support_callback_type: agentSupportItem.support_callback_type || null,
         support_resolved: agentSupportItem.support_resolved || null,
         support_transfer: agentSupportItem.support_transfer || null,
         support_validated: agentSupportItem.support_validated || null,
-        support_dispatch_call_equipment: agentSupportItem.support_dispatch_call_equipment || null,
+        support_dispatch_call_equipment:
+          agentSupportItem.support_dispatch_call_equipment || null,
         support_due_date: agentSupportItem.support_due_date || null,
         support_time: agentSupportItem.support_time || null,
         support_notes: agentSupportItem.support_notes || null,
@@ -420,13 +425,11 @@ export const saveSupport = async (agentSupportItem: AgentSupportItem) => {
 
     // Return the response data if the update is successful
     return response.data;
-
   } catch (error) {
     console.error("Error saving Agent Support item:", error);
     throw error;
   }
 };
-
 
 export const fetchCategories = async () => {
   try {
@@ -441,15 +444,16 @@ export const fetchCategories = async () => {
 export const getSelectedAgent = async (id: any) => {
   try {
     // Fetch the agent details by passing the agent's ID into the URL
-    const response = await axios.get(`http://127.0.0.1:8000/agentcts/id/${id}/`);
-    console.log('from api', response.data)
+    const response = await axios.get(
+      `http://127.0.0.1:8000/agentcts/id/${id}/`
+    );
+    console.log("from api", response.data);
     return response.data; // Assuming the response contains the agent's details
   } catch (error) {
     console.error("Error fetching agent:", error);
     throw error;
   }
 };
-
 
 export const fetchLookup = async () => {
   try {
@@ -466,15 +470,18 @@ export const fetchagentcts = async (
   endDate: Date | null
 ) => {
   try {
-    console.log("Api : ", startDate , endDate)
+    console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get("http://127.0.0.1:8000/agentcts/dashboard/", {
-      params: {
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      },
-    });
+    const response = await axios.get(
+      "http://127.0.0.1:8000/agentcts/dashboard/",
+      {
+        params: {
+          start_date: formattedStartDate,
+          end_date: formattedEndDate,
+        },
+      }
+    );
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -487,15 +494,18 @@ export const fetchOMview = async (
   endDate: Date | null
 ) => {
   try {
-    console.log("Api : ", startDate , endDate)
+    console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get("http://127.0.0.1:8000/agentcts/om-view-dashboard/", {
-      params: {
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      },
-    });
+    const response = await axios.get(
+      "http://127.0.0.1:8000/agentcts/om-view-dashboard/",
+      {
+        params: {
+          start_date: formattedStartDate,
+          end_date: formattedEndDate,
+        },
+      }
+    );
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -508,22 +518,24 @@ export const fetchCDview = async (
   endDate: Date | null
 ) => {
   try {
-    console.log("Api : ", startDate , endDate)
+    console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get("http://127.0.0.1:8000/agentcts/cd-view-dashboard/", {
-      params: {
-        start_date: formattedStartDate,
-        end_date: formattedEndDate,
-      },
-    });
+    const response = await axios.get(
+      "http://127.0.0.1:8000/agentcts/cd-view-dashboard/",
+      {
+        params: {
+          start_date: formattedStartDate,
+          end_date: formattedEndDate,
+        },
+      }
+    );
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
     throw error;
   }
 };
-
 
 export const fetchUserAdmindata = async () => {
   try {
