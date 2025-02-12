@@ -1,5 +1,5 @@
 // src/utilities/API.tsx
-import axios from 'axios';
+import axios from "axios";
 
 // Define and export the interface for the employee details
 export interface EmployeeDetails {
@@ -44,7 +44,7 @@ export interface TLOMDetails {
 //         // console.log("FROM DB: ", localResponse.data);
 //         const exists = localResponse.data && localResponse.data.length > 0; // Adjust based on your actual response structure
 //         // console.log("exists: ", exists);
-             
+
 //         if (exists) {
 //           console.log("FullName NAME : ", user.FirstName +' ' + user.LastName)
 //           // Store user information in sessionStorage for the current session
@@ -74,7 +74,7 @@ export interface TLOMDetails {
 //               tl_Id : user.SupervisorID,
 //               profilepicture: `https://timekeeping.vxi.com.ph/Scheduler/GetImage.aspx?id=${user.ID}`,
 //               projectId: user.ProjectId
-//             }));            
+//             }));
 //           } else{
 //             throw new Error("No Access");
 //           }
@@ -94,7 +94,6 @@ export interface TLOMDetails {
 //     throw error; // Rethrow the error for handling in the component
 //   }
 // };
-
 
 // export const getEmployeeDetails = async (hrid: string, hireDate: string): Promise<EmployeeDetails> => {
 //   try {
@@ -190,52 +189,60 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string) => {
   try {
     // Log the HRID being used
     console.log(`Fetching employee details for HRID: ${hrid}`);
- 
+
     // Fetch employee details
-    const response = await fetch(`http://127.0.0.1:8000/agentcts/employee/?hrid=${hrid}`);
+    const response = await fetch(
+      `http://127.0.0.1:8000/agentcts/employee/?hrid=${hrid}`
+    );
     if (!response.ok) {
-      throw new Error(`Error fetching employee details: ${response.statusText}`);
+      throw new Error(
+        `Error fetching employee details: ${response.statusText}`
+      );
     }
-   
+
     const user = await response.json();
     console.log("API Response:", user);
- 
+
     if (!user || !user.data || !user.data.hrid) {
       console.error("User  object is null or missing HRID:", user);
       throw new Error("HRID is Incorrect");
     }
- 
+
     // Log the HRID returned from the API
     const apiHrid = user.data.hrid; // This is the HRID returned from the API
     console.log(`HRID from API: ${apiHrid}`);
- 
+
     // Normalize HireDate format
     const newHireDate = user.data.hire_date; // Assuming the API returns it in YYYY-MM-DD format
-    console.log('new hire data', newHireDate, 'and Hiredate input', hireDate)
+    console.log("new hire data", newHireDate, "and Hiredate input", hireDate);
     if (hireDate.trim() !== newHireDate) {
       throw new Error("Hire Date is Incorrect");
     }
- 
+
     // Log the user ID being checked in the admin table
     console.log(`Checking user admin table for HRID: ${apiHrid}`);
- 
+
     // Check user admin table
-    const localResponse = await fetch(`http://127.0.0.1:8000/user-admin/user-list/?HRID=${apiHrid}`);
+    const localResponse = await fetch(
+      `http://127.0.0.1:8000/user-admin/user-list/?HRID=${apiHrid}`
+    );
     if (!localResponse.ok) {
-      throw new Error(`Error fetching user admin data: ${localResponse.statusText}`);
+      throw new Error(
+        `Error fetching user admin data: ${localResponse.statusText}`
+      );
     }
- 
+
     const localData = await localResponse.json();
     console.log("User  Admin Data:", localData); // Log the response from the user admin table
- 
+
     const exists = localData && localData.length > 0;
- 
+
     let userAdmin; // Declare userAdmin here
- 
+
     if (exists) {
       userAdmin = localData[0]; // Assuming the first entry is the user we want
       sessionStorage.setItem(
-        'authToken',
+        "authToken",
         JSON.stringify({
           id: userAdmin.id,
           name: `${userAdmin.FirstName} ${userAdmin.LastName}`,
@@ -252,7 +259,7 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string) => {
     } else {
       throw new Error("User  does not exist in the admin table.");
     }
- 
+
     // Return an object that matches the EmployeeDetails interface
     return {
       id: user.data.id,
@@ -268,21 +275,43 @@ export const getEmployeeDetails = async (hrid: string, hireDate: string) => {
   }
 };
 
-export const getTLOMdetails = async (hrid: string): Promise<TLOMDetails> => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_USER_MANAGE}/${hrid}/`);
-    const user = response.data.data[0];
-    
-    console.log("USER :", user);
 
-    // Return the full user details
+export const getTLOMdetails = async (
+  hrid: string
+): Promise<TLOMDetails | null> => {
+  try {
+    // Authenticate and get token
+
+    console.log("API AUTHENTICAITON")
+    const authResponse = await axios.post(import.meta.env.VITE_API_AUTH, {
+      username: import.meta.env.VITE_API_USERNAME,
+      password: import.meta.env.VITE_API_PASSWORD,
+    });
+
+    const token = authResponse?.data?.access;
+    console.log("TOKEN", token)
+    if (!token) {
+      console.error("Authentication failed: Token not received.");
+      return null;
+    }
+
+    // Fetch user details using the token
+    const response = await axios.get(
+      `${import.meta.env.VITE_USER_MANAGE}/${hrid}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const user = response?.data?.data?.[0] || null;
     return user;
   } catch (error) {
-    console.error("Error fetching employee details:", error);
-    throw error; // Rethrow the error for handling in the component
+    console.error(`Error fetching details for HRID: ${hrid}`, error);
+    return null;
   }
 };
-
 
 // export const isAuthenticated = () => {
 //   try {

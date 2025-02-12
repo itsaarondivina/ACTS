@@ -113,11 +113,12 @@ const Support: React.FC = () => {
   ]);
 
   useEffect(() => {
-    // Prevent scrolling
-    // document.body.style.overflow = "hidden";
+    // Ensure scrolling is allowed
+    document.body.style.overflow = "auto";
+
     return () => {
-      // Reset scrolling behavior when the component unmounts
-      // document.body.style.overflow = "auto";
+      // Optionally reset overflow to auto when the component unmounts
+      document.body.style.overflow = "auto";
     };
   }, []);
 
@@ -722,8 +723,10 @@ const Support: React.FC = () => {
           </Box>
         ))
       ) : (
-        <Typography variant="h6" sx={{ textAlign: "center", marginTop: 2 }}>
-        </Typography>
+        <Typography
+          variant="h6"
+          sx={{ textAlign: "center", marginTop: 2 }}
+        ></Typography>
       )}
 
       {/* OM Form */}

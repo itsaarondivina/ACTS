@@ -31,8 +31,8 @@ def exchange_token(request):
         'grant_type': 'authorization_code',
         'code': code,
         # 'redirect_uri': 'http://localhost:5173/authorization-code/callback',
-        # 'redirect_uri': 'http://127.0.0.1:8000/authorization-code/callback',
-        'redirect_uri': 'https://vxi-itech-acts-dtvtech-127333559366.us-central1.run.app/authorization-code/callback', 
+        'redirect_uri': 'http://127.0.0.1:8000/authorization-code/callback',
+        # 'redirect_uri': 'https://vxi-itech-acts-dtvtech-127333559366.us-central1.run.app/authorization-code/callback', 
         # 'client_id': '0oamtgi9kffnJDVFD5d7', <- Local
         # 'client_id': '0oamtlx0l8bCM4lrm5d7',
         'client_id': '0oamuia55wqxjHKVC5d7',

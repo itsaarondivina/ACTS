@@ -404,8 +404,27 @@ export const saveSupport = async (agentSupportItem: AgentSupportItem) => {
     }
 
     // Make a PATCH request to update the AgentCts object
-    const response = await axios.patch(
-      `http://127.0.0.1:8000/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`, // Use the agent ID to target the specific agent
+    // const response = await axios.patch(
+    //   `http://127.0.0.1:8000/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`, // Use the agent ID to target the specific agent
+    //   {
+    //     support_reason_for_account_review:
+    //       agentSupportItem.support_reason_for_account_review || null,
+    //     support_callback_type: agentSupportItem.support_callback_type || null,
+    //     support_resolved: agentSupportItem.support_resolved || null,
+    //     support_transfer: agentSupportItem.support_transfer || null,
+    //     support_validated: agentSupportItem.support_validated || null,
+    //     support_dispatch_call_equipment:
+    //       agentSupportItem.support_dispatch_call_equipment || null,
+    //     support_due_date: agentSupportItem.support_due_date || null,
+    //     support_time: agentSupportItem.support_time || null,
+    //     support_notes: agentSupportItem.support_notes || null,
+    //     support_created_by: hridsession || null,
+    //     support_updated_by: hridsession || null,
+    //   }
+    // );
+
+    const response = await API.patch(
+      `/agentcts/update-agent-cts/${agentSupportItem.agent_id}/`, // Use the agent ID to target the specific agent
       {
         support_reason_for_account_review:
           agentSupportItem.support_reason_for_account_review || null,
@@ -433,7 +452,8 @@ export const saveSupport = async (agentSupportItem: AgentSupportItem) => {
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/category/");
+    // const response = await axios.get("http://127.0.0.1:8000/category/");
+    const response = await API.get("/category/");
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -444,9 +464,8 @@ export const fetchCategories = async () => {
 export const getSelectedAgent = async (id: any) => {
   try {
     // Fetch the agent details by passing the agent's ID into the URL
-    const response = await axios.get(
-      `http://127.0.0.1:8000/agentcts/id/${id}/`
-    );
+    const response = await API.get(`/agentcts/id/${id}/`);
+
     console.log("from api", response.data);
     return response.data; // Assuming the response contains the agent's details
   } catch (error) {
@@ -457,7 +476,8 @@ export const getSelectedAgent = async (id: any) => {
 
 export const fetchLookup = async () => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/dropdownlookup/");
+    // const response = await axios.get("http://127.0.0.1:8000/dropdownlookup/");
+    const response = await API.get("/dropdownlookup/");
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -473,15 +493,12 @@ export const fetchagentcts = async (
     console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get(
-      "http://127.0.0.1:8000/agentcts/dashboard/",
-      {
-        params: {
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
-        },
-      }
-    );
+    const response = await API.get("/agentcts/dashboard/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -497,15 +514,12 @@ export const fetchOMview = async (
     console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get(
-      "http://127.0.0.1:8000/agentcts/om-view-dashboard/",
-      {
-        params: {
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
-        },
-      }
-    );
+    const response = await API.get("/agentcts/om-view-dashboard/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -521,15 +535,12 @@ export const fetchCDview = async (
     console.log("Api : ", startDate, endDate);
     const formattedStartDate = startDate ? startDate.toISOString() : "";
     const formattedEndDate = endDate ? endDate.toISOString() : "";
-    const response = await axios.get(
-      "http://127.0.0.1:8000/agentcts/cd-view-dashboard/",
-      {
-        params: {
-          start_date: formattedStartDate,
-          end_date: formattedEndDate,
-        },
-      }
-    );
+    const response = await API.get("/agentcts/cd-view-dashboard/", {
+      params: {
+        start_date: formattedStartDate,
+        end_date: formattedEndDate,
+      },
+    });
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -539,7 +550,7 @@ export const fetchCDview = async (
 
 export const fetchUserAdmindata = async () => {
   try {
-    const response = await axios.get("http://127.0.0.1:8000/user_admin/");
+    const response = await API.get("/user_admin/");
     return response.data; // Assuming the response contains the categories
   } catch (error) {
     console.error("Error fetching categories:", error);
@@ -562,17 +573,14 @@ export const saveLookupItem = async (lookupItem: {
 
     // If id exists, it's an update request
     if (lookupItem.id) {
-      const response = await axios.put(
-        `http://127.0.0.1:8000/dropdownlookup/${lookupItem.id}/`,
+      const response = await API.put(
+        `/dropdownlookup/${lookupItem.id}/`,
         lookupItem
       );
       return response.data; // Return the updated item
     } else {
       // Otherwise, it's an add request
-      const response = await axios.post(
-        "http://127.0.0.1:8000/dropdownlookup/",
-        lookupItem
-      );
+      const response = await API.post("/dropdownlookup/", lookupItem);
       return response.data; // Return the newly created item
     }
   } catch (error) {
@@ -590,8 +598,8 @@ export const saveUserManagement = async (userinfo: {
     const hridParts = userinfo.hrid.split("\\");
     console.log("HRID Parts:", hridParts);
 
-    const checkexist = await axios.get(
-      `http://127.0.0.1:8000/user_admin/?SamAccount=${hridParts[1]}`
+    const checkexist = await API.get(
+      `/user_admin/?SamAccount=${hridParts[1]}`
     );
     const exists = checkexist.data && checkexist.data.length > 0; // Adjust based on your actual response structure
     console.log(exists);
